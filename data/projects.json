@@ -1,0 +1,204 @@
+[
+  {
+    "slug": "relocationdevs",
+    "cover": "map",
+    "kind": {
+      "es": "Plataforma de datos · Modelo ML",
+      "en": "Data platform · ML model"
+    },
+    "title": "RelocationDevs",
+    "stack": [
+      "Python",
+      "pandas",
+      "scikit-learn",
+      "Streamlit",
+      "Plotly",
+      "Folium"
+    ],
+    "links": {
+      "repo": "https://github.com/Udamian/RelocationDevs",
+      "demo": null
+    },
+    "summary": {
+      "es": "Plataforma de apoyo a la decisión para profesionales tech que valoran en qué ciudad vivir fuera de su país: combina salario esperado, coste de vida, impuestos y mercado laboral.",
+      "en": "Decision-support platform for tech professionals choosing a city abroad: it combines expected salary, cost of living, taxes and the job market."
+    },
+    "features": {
+      "es": [
+        "Explorador de ciudades con una puntuación de reubicación y tabla filtrable.",
+        "Comparador de ciudades con gráficas de barras y radar normalizado.",
+        "Mapa interactivo con agrupación de ciudades y ventanas de detalle.",
+        "Buscador de ciudad ideal en tres pasos, con radar de prioridades.",
+        "Estimador de salario con un modelo Gradient Boosting.",
+        "Informe en PDF con fotos de las ciudades y distribución de salarios."
+      ],
+      "en": [
+        "City explorer with a relocation score and a filterable table.",
+        "City comparison with bar charts and a normalised radar chart.",
+        "Interactive map with clustering and detail popups.",
+        "Three-step ideal-city finder with a priority radar.",
+        "Salary estimator based on a Gradient Boosting model.",
+        "PDF report with city photos and salary distributions."
+      ]
+    },
+    "facts": {
+      "es": [
+        "Costes de vida de 578 ciudades (Kaggle, Cost of Living Index 2022).",
+        "Salarios de 18.112 desarrolladores de 149 países (Stack Overflow Developer Survey 2023).",
+        "Modelo de regresión del salario anual bruto: MAE de 29.022 € y R² de 0,53."
+      ],
+      "en": [
+        "Cost of living for 578 cities (Kaggle, Cost of Living Index 2022).",
+        "Salaries of 18,112 developers in 149 countries (Stack Overflow Developer Survey 2023).",
+        "Gross annual salary regression model: MAE of €29,022 and R² of 0.53."
+      ]
+    },
+    "note": {
+      "es": "El error del modelo es alto por la gran variación geográfica de los datos (149 países). La limitación está documentada y se muestra a las personas usuarias dentro de la app.",
+      "en": "The model error is high because of the large geographic variation in the data (149 countries). The limitation is documented and shown to users inside the app."
+    },
+    "skin": "reloc",
+    "shot": {
+      "full": "assets/capturas/relocationdevs.webp",
+      "thumb": "assets/capturas/relocationdevs-th.webp",
+      "w": 1200,
+      "h": 597,
+      "alt": {
+        "es": "Captura real de la app original: pantalla de bienvenida con el logo, el título RelocationDevs y el formulario del perfil profesional, en tema oscuro.",
+        "en": "Real screenshot of the original app: welcome screen with the logo, the RelocationDevs title and the professional-profile form, in a dark theme."
+      },
+      "cap": {
+        "es": "Captura real de la app original en Streamlit (tema Midnight Silver).",
+        "en": "Real screenshot of the original Streamlit app (Midnight Silver theme)."
+      }
+    }
+  },
+  {
+    "slug": "job-tracker",
+    "cover": "funnel",
+    "kind": {
+      "es": "API + Dashboard",
+      "en": "API + Dashboard"
+    },
+    "title": "Job Tracker",
+    "stack": [
+      "Python",
+      "FastAPI",
+      "PostgreSQL",
+      "SQLAlchemy",
+      "Pydantic",
+      "Pandas",
+      "Docker",
+      "pytest"
+    ],
+    "links": {
+      "repo": "https://github.com/Udamian/job-tracker",
+      "demo": null
+    },
+    "summary": {
+      "es": "Seguimiento personal de candidaturas de empleo con estadísticas: tasas de respuesta y embudo de selección.",
+      "en": "Personal job-application tracker with statistics: response rates and a hiring funnel."
+    },
+    "features": {
+      "es": [
+        "Crear, ver, editar y borrar candidaturas, con filtros por empresa, tipo, modalidad, estado y versión del CV.",
+        "KPIs, embudo acumulado, candidaturas por semana y tasa de respuesta por tipo o por versión del CV.",
+        "Dashboard en HTML y JavaScript puros con Chart.js, sin framework ni paso de compilación.",
+        "El estado «Sin respuesta» no se puede poner a mano: el sistema lo asigna tras 21 días sin novedades."
+      ],
+      "en": [
+        "Create, view, edit and delete applications, with filters by company, type, modality, status and CV version.",
+        "KPIs, a cumulative funnel, applications per week and response rate by type or CV version.",
+        "Dashboard in plain HTML and JavaScript with Chart.js, no framework or build step.",
+        "The “No response” status cannot be set by hand: the system assigns it after 21 days without news."
+      ]
+    },
+    "facts": {
+      "es": [
+        "API REST con FastAPI y documentación automática en /docs.",
+        "Se levanta con Docker Compose o, sin Docker, con SQLite local.",
+        "Pruebas con pytest sobre una base SQLite en memoria."
+      ],
+      "en": [
+        "REST API with FastAPI and automatic docs at /docs.",
+        "Runs with Docker Compose or, without Docker, on a local SQLite file.",
+        "Tests with pytest on an in-memory SQLite database."
+      ]
+    },
+    "note": {
+      "es": "Todavía no tiene autenticación y la comprobación de «Sin respuesta» se hace al consultar, no en segundo plano. Siguiente paso previsto: separar empresas, entrevistas, pruebas técnicas y versiones de CV.",
+      "en": "It has no authentication yet, and the “No response” check runs at query time, not in the background. Planned next step: split companies, interviews, technical tests and CV versions."
+    },
+    "skin": "base"
+  },
+  {
+    "slug": "ytm-sync",
+    "cover": "sync",
+    "kind": {
+      "es": "Herramienta · App de Spotify",
+      "en": "Tool · Spotify app"
+    },
+    "title": "YTM Sync",
+    "stack": [
+      "TypeScript",
+      "Python",
+      "Flask",
+      "ytmusicapi",
+      "SQLite",
+      "Spicetify"
+    ],
+    "links": {
+      "repo": "https://github.com/Udamian/spicetify-ytm-sync",
+      "demo": null
+    },
+    "summary": {
+      "es": "Mantiene una playlist de Spotify (o tus Me gusta) copiada y en el mismo orden en YouTube Music. App personalizada de Spicetify con un ayudante local en Python.",
+      "en": "Keeps a Spotify playlist (or your Liked Songs) mirrored, in the same order, on YouTube Music. A Spicetify custom app with a small local Python helper."
+    },
+    "features": {
+      "es": [
+        "Primera copia de los Me gusta o de una playlist a una playlist nueva o existente de YouTube Music.",
+        "En cada arranque de Spotify, las canciones nuevas suben arriba y se aplican los cambios de las playlists copiadas.",
+        "Las coincidencias dudosas pasan a una lista de revisión con sugerencias para aceptar, reemplazar u omitir.",
+        "Tarjeta «Tus copias» para desactivarlas u olvidarlas, sin borrar nada en ninguno de los dos servicios."
+      ],
+      "en": [
+        "First-run copy of Liked Songs or a playlist to a new or existing YouTube Music playlist.",
+        "On each Spotify start, new songs go to the top and changes to copied playlists are applied.",
+        "Uncertain matches go to a review list with suggestions to accept, replace or skip.",
+        "A “Your copies” card to switch copies off or forget them, without deleting anything on either service."
+      ]
+    },
+    "facts": {
+      "es": [
+        "Versión beta 0.1.x para Windows, con licencia MIT.",
+        "Probada con unas 2.000 canciones de Me gusta.",
+        "Lee los datos de Spotify con las APIs internas de Spicetify: no necesita la API web de Spotify ni Premium."
+      ],
+      "en": [
+        "Beta 0.1.x for Windows, MIT licence.",
+        "Tested with about 2,000 liked songs.",
+        "Reads Spotify data through Spicetify's internal APIs: no Spotify Web API or Premium needed."
+      ]
+    },
+    "note": {
+      "es": "YouTube Music no tiene API oficial, así que ytmusicapi puede dejar de funcionar en cualquier momento. La sesión se guarda solo en tu equipo y el proyecto no está afiliado a Spotify, Google, YouTube ni Spicetify.",
+      "en": "YouTube Music has no official API, so ytmusicapi may break at any time. The session is stored only on your computer and the project is not affiliated with Spotify, Google, YouTube or Spicetify."
+    },
+    "skin": "player",
+    "shot": {
+      "full": "assets/capturas/ytm-sync.webp",
+      "thumb": "assets/capturas/ytm-sync-th.webp",
+      "w": 804,
+      "h": 1193,
+      "alt": {
+        "es": "Captura de YTM Sync en Spotify: asistente de cuatro pasos completado y formulario para elegir qué copiar y dónde guardarlo en YouTube Music.",
+        "en": "YTM Sync inside Spotify: four-step setup completed and a form to choose what to copy and where to save it on YouTube Music."
+      },
+      "cap": {
+        "es": "Captura real de la app (paso Playlist), en tema oscuro dentro de Spotify.",
+        "en": "Real screenshot of the app (Playlist step), dark theme inside Spotify."
+      }
+    }
+  }
+]

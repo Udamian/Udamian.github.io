@@ -1,0 +1,26 @@
+name: CI
+on:
+  push:
+  pull_request:
+jobs:
+  checks:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Generar el sitio y comprobar que no hay cambios sin subir
+        run: |
+          python tools/build.py
+          git diff --exit-code
+      - name: Higiene (hreflang, sitemap, robots, enlaces)
+        run: python tests/hygiene.py
+      - name: Instalar Playwright
+        run: |
+          pip install playwright
+          playwright install --with-deps chromium
+      - name: Pruebas de navegador
+        run: |
+          python tests/smoke.py
+          python tests/reloc_smoke.py

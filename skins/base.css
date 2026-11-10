@@ -1,0 +1,18 @@
+/* Piel base de las paginas de proyecto (neutra).
+   Cada proyecto tendra despues su propia piel de epoca que sustituira a este archivo. */
+.skin-base{background:#fff}
+.ptop{display:flex;justify-content:space-between;gap:16px;max-width:760px;margin:0 auto;padding:16px}
+.ptop a{font-size:14px}
+.proj{max-width:760px;margin:0 auto;padding:8px 16px 16px}
+.proj .kind{margin:12px 0 0;color:#d93025;font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:.05em}
+.proj h1{font:700 40px/1.15 Georgia,serif;margin:4px 0 8px}
+.proj .lead{font-size:18px;color:#3c4043;margin:0 0 14px}
+.proj h2{font:700 20px Georgia,serif;margin:30px 0 8px}
+.proj ul{padding-left:20px}.proj li{margin:5px 0}
+.proj .chips{padding:0}
+.proj .hero{display:block;width:100%;max-width:520px;border-radius:10px;border:1px solid #dadce0;margin:16px 0 0}
+.btns{display:flex;flex-wrap:wrap;gap:10px}
+.btn{display:inline-block;background:#3b4cca;color:#fff!important;text-decoration:none;padding:10px 16px;border-radius:6px;font-weight:700;font-size:15px}
+.btn.alt{background:#fff;color:#3b4cca!important;border:2px solid #3b4cca;padding:8px 14px}
+.btn:hover{filter:brightness(1.1)}
+@media (max-width:560px){.proj h1{font-size:30px}}

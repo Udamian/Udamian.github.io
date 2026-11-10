@@ -1,0 +1,51 @@
+{
+  "name": "Damián Cambeiro",
+  "initials": "DC",
+  "site_host": "udamian.github.io",
+  "base_path": "",
+  "role": {
+    "es": "Junior Python Developer | Backend & Data Engineering",
+    "en": "Junior Python Developer | Backend & Data Engineering"
+  },
+  "bio": {
+    "es": "Titulado en Desarrollo de Aplicaciones Multiplataforma con especialización en Big Data e IA. Busco un puesto junior de Python, backend, análisis de datos o ingeniería de datos.",
+    "en": "Multiplatform Application Development graduate specialised in Big Data and AI. Looking for a junior role in Python, backend, data analysis or data engineering."
+  },
+  "education": {
+    "es": [
+      "Especialización en Big Data e Inteligencia Artificial (máster profesional) · 2025–2026 · nota media superior a 9",
+      "Técnico Superior en Desarrollo de Aplicaciones Multiplataforma (DAM) · 2023–2025"
+    ],
+    "en": [
+      "Big Data and Artificial Intelligence specialisation (professional master's) · 2025–2026 · average grade above 9",
+      "Higher Technician in Multiplatform Application Development (DAM) · 2023–2025"
+    ]
+  },
+  "experience": {
+    "es": [
+      "Desarrollador junior en prácticas · Optitech Europa · abril–junio 2025: módulos Python/Odoo, APIs REST, flujos n8n y una solución RAG con LLMs"
+    ],
+    "en": [
+      "Junior developer (internship) · Optitech Europa · April–June 2025: Python/Odoo modules, REST APIs, n8n workflows and an LLM-based RAG solution"
+    ]
+  },
+  "languages": {
+    "es": "Español y gallego (nativos) · Inglés B2",
+    "en": "Spanish and Galician (native) · English B2"
+  },
+  "skills": [
+    "Python",
+    "SQL",
+    "FastAPI",
+    "PostgreSQL",
+    "Pandas",
+    "Docker"
+  ],
+  "links": {
+    "github": "https://github.com/Udamian",
+    "linkedin": "https://www.linkedin.com/in/damian-cambeiro/",
+    "email": "dcambeiro15@gmail.com",
+    "cv": "assets/cv/Damian_Cambeiro_CV.pdf"
+  },
+  "first_name": "Damián"
+}
