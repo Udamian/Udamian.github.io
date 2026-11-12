@@ -47,5 +47,66 @@
     "email": "dcambeiro15@gmail.com",
     "cv": "assets/cv/Damian_Cambeiro_CV.pdf"
   },
-  "first_name": "Damián"
+  "first_name": "Damián",
+  "role_short": {
+    "es": "Desarrollador junior de Python y datos",
+    "en": "Junior Python and data developer"
+  },
+  "location": {
+    "es": "Galicia, España",
+    "en": "Galicia, Spain"
+  },
+  "intro": {
+    "es": "Estudié DAM y un máster en Big Data e IA. Busco mi primer puesto en backend, análisis o ingeniería de datos.",
+    "en": "I studied DAM (multiplatform app development) and a Big Data and AI master's. I'm looking for my first role in backend, data analysis or data engineering."
+  },
+  "cv_date": "2026-10-25",
+  "path": {
+    "es": [
+      {
+        "when": "2025–2026 · nota media superior a 9",
+        "title": "Máster profesional en Big Data e Inteligencia Artificial",
+        "s": "formacion"
+      },
+      {
+        "when": "abril–junio 2025 · prácticas",
+        "title": "Desarrollador junior · Optitech Europa",
+        "text": "Módulos Python/Odoo, APIs REST, flujos n8n y una solución RAG con modelos de lenguaje para consultar documentación interna.",
+        "s": "exp"
+      },
+      {
+        "when": "2023–2025",
+        "title": "Técnico Superior en Desarrollo de Aplicaciones Multiplataforma",
+        "s": "formacion"
+      }
+    ],
+    "en": [
+      {
+        "when": "2025–2026 · average grade above 9",
+        "title": "Professional master's in Big Data and Artificial Intelligence",
+        "s": "formacion"
+      },
+      {
+        "when": "April–June 2025 · internship",
+        "title": "Junior developer · Optitech Europa",
+        "text": "Python/Odoo modules, REST APIs, n8n workflows and an LLM-based RAG solution to query internal documentation.",
+        "s": "exp"
+      },
+      {
+        "when": "2023–2025",
+        "title": "Higher Technician in Multiplatform Application Development",
+        "s": "formacion"
+      }
+    ]
+  },
+  "panel": {
+    "edu": {
+      "es": "Máster en Big Data e IA (2025–26) · DAM (2023–25)",
+      "en": "Master's in Big Data and AI (2025–26) · DAM (2023–25)"
+    },
+    "exp": {
+      "es": "Prácticas en Optitech Europa, abril–junio 2025",
+      "en": "Internship at Optitech Europa, April–June 2025"
+    }
+  }
 }

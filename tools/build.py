@@ -15,6 +15,7 @@ import shutil
 import sys
 import unicodedata
 from html import escape as esc
+from urllib.parse import quote
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from skins import SKINS as EXTRA  # noqa: E402  (pieles de proyecto: player, reloc)
@@ -28,19 +29,39 @@ SITE = "https://udamian.github.io"  # origen + base_path; build() lo fija desde 
 STR = {
     "es": {
         "lang_name": "Español", "other_name": "English",
+        "bar_one": "Resultado 1 - 1 de 1 de", "bar_many": "Resultados 1 - {n} de {n} de", "bar_tail": "(0,00 segundos)",
+        "none_q": "Tu búsqueda - {q} - no obtuvo ningún resultado.", "similar": "Páginas similares", "ads_h": "Enlaces patrocinados",
+        "pager_res": "Página de resultados:", "sz_px": "{w} x {h} píxeles - {k}k", "more_about": "Sobre mí »",
+        "ad1_t": "{name}: desarrollador junior", "ad1_a": "Python, SQL y datos.", "ad1_b": "Máster en Big Data e IA y ciclo DAM.",
+        "ad2_t": "CV de {name} (PDF)", "ad2_a": "Perfil, competencias y proyectos", "ad2_b": "en una sola página.",
+        "ad3_t": "Escribir a {first}", "ad3_a": "Busca su primer puesto en backend,", "ad3_b": "análisis o ingeniería de datos.",
+        "ad4_t": "{name} en LinkedIn", "ad4_a": "Experiencia, formación y contacto", "ad4_b": "profesional.",
+        "didyou": "Quizás quisiste decir:", "didyou_link": "contratar a Damián",
+        "didyou_txt": "Escríbele por correo o por LinkedIn: busca su primer puesto en backend, análisis o ingeniería de datos.",
+        "p_label": "Perfil de Damián Cambeiro", "p_cache": "En caché · {date}", "p_more": "Ver el perfil completo y el CV en caché",
+        "f_edu": "Formación", "f_exp": "Experiencia", "f_lang": "Idiomas", "f_tools": "Herramientas", "f_loc": "Ubicación",
+        "next": "Siguiente", "nav_top": "Enlaces", "nav_foot": "Pie de página", "pager_label": "Cambeiro, página 1", "cv_img_alt": "Cabecera del CV de Damián Cambeiro: nombre, puesto, contacto y perfil.",
+        "cap_img": "Captura de {t}", "stats_label": "Datos clave",
+        "ab_back": "← Resultados", "ab_path": "Trayectoria", "ab_tools": "Herramientas", "ab_tools_p": "Búsquedas relacionadas con este perfil. Cada una abre los proyectos que la usan.",
+        "ab_lang": "Idiomas", "n_proj_one": "1 proyecto", "n_proj_many": "{n} proyectos", "ab_hire_p": "Escríbele por correo o por LinkedIn. El CV está a un clic, a la derecha.",
+        "ab_mail": "Escribir un correo", "ab_li": "Abrir LinkedIn",
+        "cache_banner": "Esta es la copia en caché de Cambeiro de <a href=\"{url}\">{file}</a>. Es una instantánea de la página tal y como se veía el {date}. La página actual puede haber cambiado desde entonces.<br>Se han resaltado estos términos de búsqueda:",
+        "terms_label": "Resaltar en el CV:", "term_ph": "escribe otro término", "term_rm": "quitar", "term_add": "Resaltar",
+        "open_pdf": "Abrir el PDF", "dl_pdf": "Descargar · {size}", "dl_cv": "Descargar CV · PDF · {size}", "folio_label": "Copia del CV de Damián Cambeiro (en español)", "see_cv": "Ver el CV completo",
+        "months": ["ene", "feb", "mar", "abr", "may", "jun", "jul", "ago", "sep", "oct", "nov", "dic"],
         "default_q": "proyectos de {name}",
         "search_label": "Buscar en el portfolio", "search_btn": "Buscar",
-        "tab_all": "Todo", "tab_img": "Imágenes", "tab_code": "Código",
+        "tab_all": "Web", "tab_img": "Imágenes", "tab_code": "Código",
         "tabs_label": "Tipo de resultado", "og_alt": "Cambeiro, el buscador del portfolio de Damián Cambeiro", "home_h1": "Cambeiro: portfolio de {name}",
-        "count_one": "1 resultado", "count_many": "{n} resultados",
+        "count_one": "Cambeiro encontró 1 resultado (0,00 segundos)", "count_many": "Cambeiro encontró {n} resultados (0,00 segundos)",
         "lucky": "Voy a tener suerte",
         "related": "Búsquedas relacionadas", "related_q": "proyectos con {x}",
-        "none_title": "Tu búsqueda no ha obtenido ningún resultado.",
+        "none_title": "Tu búsqueda no ha obtenido ningún resultado.", "none_sug": "Sugerencias:",
         "none_tips": ["Revisa que las palabras estén bien escritas.",
                       "Prueba con otras palabras, por ejemplo «Python» o «Docker».",
                       "Vuelve a escribir «proyectos de {name}» para ver todos."],
         "stop": ["proyecto", "proyectos", "de", "del", "con", "en", "y", "los", "las", "el", "la", "un", "una", "por"],
-        "view_page": "Ver página", "repo": "Repositorio", "demo": "Demo",
+        "view_page": "Ver página", "repo": "Repositorio",
         "about_kind": "Perfil", "about_slug": "sobre-mi", "util_about": "Sobre mí", "pager_note": "Resultados de la búsqueda", "card_about": "Sobre mí", "card_edu": "Formación", "card_exp": "Experiencia",
         "card_lang": "Idiomas", "card_tools": "Herramientas", "card_links": "Perfiles",
         "link_github": "GitHub", "link_linkedin": "LinkedIn", "link_email": "Correo", "link_cv": "CV (PDF)",
@@ -48,7 +69,7 @@ STR = {
         "footer_note": "Este buscador es ficticio y forma parte del portfolio de Damián Cambeiro. No está afiliado a ningún buscador real.",
         "back": "← Volver a los resultados",
         "what": "Qué hace", "facts": "Datos clave", "stack": "Tecnologías", "notes": "Notas y límites",
-        "btn_repo": "Ver código en GitHub", "btn_demo": "Abrir demo",
+        "btn_repo": "Ver código en GitHub",
         "meta_home": "Portfolio de {name}: proyectos de Python, backend e ingeniería de datos, presentados como resultados de un buscador.",
         "nf_title": "404. No se ha encontrado la página",
         "nf_text": "La dirección que has escrito no coincide con ningún documento de este sitio.",
@@ -58,19 +79,39 @@ STR = {
     },
     "en": {
         "lang_name": "English", "other_name": "Español",
+        "bar_one": "Results 1 - 1 of 1 for", "bar_many": "Results 1 - {n} of {n} for", "bar_tail": "(0.00 seconds)",
+        "none_q": "Your search - {q} - did not match any documents.", "similar": "Similar pages", "ads_h": "Sponsored Links",
+        "pager_res": "Result Page:", "sz_px": "{w} x {h} pixels - {k}k", "more_about": "About me »",
+        "ad1_t": "{name}: junior developer", "ad1_a": "Python, SQL and data.", "ad1_b": "Big Data and AI master's, DAM diploma.",
+        "ad2_t": "{name}'s CV (PDF)", "ad2_a": "Profile, skills and projects", "ad2_b": "on a single page.",
+        "ad3_t": "Write to {first}", "ad3_a": "Looking for a first role in backend,", "ad3_b": "data analysis or data engineering.",
+        "ad4_t": "{name} on LinkedIn", "ad4_a": "Experience, education and", "ad4_b": "professional contact.",
+        "didyou": "Did you mean:", "didyou_link": "hire Damián",
+        "didyou_txt": "Write to him by email or LinkedIn: he is looking for his first role in backend, data analysis or data engineering.",
+        "p_label": "Damián Cambeiro's profile", "p_cache": "Cached · {date}", "p_more": "See the full profile and the cached CV",
+        "f_edu": "Education", "f_exp": "Experience", "f_lang": "Languages", "f_tools": "Tools", "f_loc": "Location",
+        "next": "Next", "nav_top": "Links", "nav_foot": "Footer", "pager_label": "Cambeiro, page 1", "cv_img_alt": "Top of Damián Cambeiro's CV: name, title, contact details and profile.",
+        "cap_img": "Screenshot of {t}", "stats_label": "Key figures",
+        "ab_back": "← Results", "ab_path": "Background", "ab_tools": "Tools", "ab_tools_p": "Searches related to this profile. Each one opens the projects that use it.",
+        "ab_lang": "Languages", "n_proj_one": "1 project", "n_proj_many": "{n} projects", "ab_hire_p": "Write to him by email or LinkedIn. The CV is one click away, on the right.",
+        "ab_mail": "Write an email", "ab_li": "Open LinkedIn",
+        "cache_banner": "This is Cambeiro's cache of <a href=\"{url}\">{file}</a>. It is a snapshot of the page as it appeared on {date}. The current page could have changed in the meantime.<br>These search terms have been highlighted:",
+        "terms_label": "Highlight in the CV:", "term_ph": "type another term", "term_rm": "remove", "term_add": "Highlight",
+        "open_pdf": "Open the PDF", "dl_pdf": "Download · {size}", "dl_cv": "Download CV · PDF · {size}", "folio_label": "Copy of Damián Cambeiro's CV (in Spanish)", "see_cv": "See the full CV",
+        "months": ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
         "default_q": "projects by {name}",
         "search_label": "Search the portfolio", "search_btn": "Search",
-        "tab_all": "All", "tab_img": "Images", "tab_code": "Code",
+        "tab_all": "Web", "tab_img": "Images", "tab_code": "Code",
         "tabs_label": "Result type", "og_alt": "Cambeiro, the search engine of Damián Cambeiro's portfolio", "home_h1": "Cambeiro: {name}'s portfolio",
-        "count_one": "1 result", "count_many": "{n} results",
+        "count_one": "Cambeiro found 1 result (0.00 seconds)", "count_many": "Cambeiro found {n} results (0.00 seconds)",
         "lucky": "I'm feeling lucky",
         "related": "Related searches", "related_q": "projects with {x}",
-        "none_title": "Your search did not match any results.",
+        "none_title": "Your search did not match any results.", "none_sug": "Suggestions:",
         "none_tips": ["Make sure all words are spelled correctly.",
                       "Try different keywords, for example “Python” or “Docker”.",
                       "Type “projects by {name}” again to see everything."],
         "stop": ["project", "projects", "by", "of", "with", "in", "and", "the", "a", "an", "for"],
-        "view_page": "View page", "repo": "Repository", "demo": "Demo",
+        "view_page": "View page", "repo": "Repository",
         "about_kind": "Profile", "about_slug": "about", "util_about": "About me", "pager_note": "Search results", "card_about": "About me", "card_edu": "Education", "card_exp": "Experience",
         "card_lang": "Languages", "card_tools": "Tools", "card_links": "Profiles",
         "link_github": "GitHub", "link_linkedin": "LinkedIn", "link_email": "Email", "link_cv": "CV (PDF, in Spanish)",
@@ -78,7 +119,7 @@ STR = {
         "footer_note": "This search engine is fictional and part of Damián Cambeiro's portfolio. It is not affiliated with any real search engine.",
         "back": "← Back to results",
         "what": "What it does", "facts": "Key facts", "stack": "Tech stack", "notes": "Notes and limits",
-        "btn_repo": "View code on GitHub", "btn_demo": "Open demo",
+        "btn_repo": "View code on GitHub",
         "meta_home": "Portfolio of {name}: Python, backend and data engineering projects, shown as search results.",
         "nf_title": "404. Page not found",
         "nf_text": "The address you typed does not match any document on this site.",
@@ -88,7 +129,7 @@ STR = {
     },
 }
 
-LOGO_COLORS = ["#3b6fd4", "#d93025", "#f4b400", "#3b6fd4", "#0f9d58", "#d93025", "#3b6fd4", "#f4b400"]
+LOGO_COLORS = ["#0033cc", "#cc0000", "#ffcc00", "#0033cc", "#009900", "#cc0000", "#0033cc", "#ffcc00"]
 FAVICON = ("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E"
            "%3Crect width='32' height='32' rx='7' fill='%234d90fe'/%3E"
            "%3Ctext x='16' y='23' font-family='Georgia,serif' font-size='21' font-weight='700' "
@@ -180,8 +221,23 @@ def cover_svg(kind, seed):
 
 # -------------------------------------------------------------------- plantillas
 def logo(small=False):
-    letters = "".join(f'<span style="color:{LOGO_COLORS[i]}">{c}</span>' for i, c in enumerate("Cambeiro"))
-    return letters
+    return "".join(f'<span style="color:{LOGO_COLORS[i]}">{c}</span>' for i, c in enumerate("Cambeiro"))
+
+
+def rich(t):
+    """Texto con **negrita** y *cursiva* minimos (datos propios, ya de confianza)."""
+    t = esc(t)
+    t = re.sub(r"\*\*(.+?)\*\*", r"<b>\1</b>", t)
+    return re.sub(r"\*(.+?)\*", r"<i>\1</i>", t)
+
+
+def fmt_date(lang, iso):
+    y, m, d = (int(x) for x in iso.split("-"))
+    return f"{d} {STR[lang]['months'][m - 1]} {y}"
+
+
+def file_kb(path):
+    return f"{round(os.path.getsize(os.path.join(ROOT, path)) / 1024)} KB"
 
 
 def head(lang, rel, title, desc, alts, css, extra=""):
@@ -209,27 +265,36 @@ def head(lang, rel, title, desc, alts, css, extra=""):
         f'<meta property="og:title" content="{esc(title)}"><meta property="og:description" content="{esc(desc)}">'
         '<meta property="og:type" content="website">'
         f'{social}<link rel="icon" href="{FAVICON}">{links}'
-        f"{csslinks}{extra}</head>"
+        f"{extra}{csslinks}</head>"
     )
 
 
+def font_preload(lang, rel):
+    return (f'<link rel="preload" href="{asset(lang, rel, "assets/fonts/fraunces-latin-800-normal.woff2")}" '
+            'as="font" type="font/woff2" crossorigin>')
+
+
 def header(lang, rel, prof, qvalue, switch_href):
+    """Cabecera clasica: fila de pestanas, logo + formulario con botones grises de sistema."""
     s = STR[lang]
     gh = prof["links"]["github"]
     other = "en" if lang == "es" else "es"
-    return f"""<nav class="util" aria-label="Links"><a href="{href(lang, rel, lang, 'about')}">{esc(s['util_about'])}</a><a href="{switch_href}" hreflang="{other}" lang="{other}">{esc(s['other_name'])}</a><a href="{esc(gh)}" rel="noopener">GitHub</a></nav>
+    return f"""<nav class="gt" aria-label="{esc(s['nav_top'])}">
+<div role="tablist" aria-label="{esc(s['tabs_label'])}">
+<a role="tab" href="#todo" data-tab="todo" aria-selected="true">{s['tab_all']}</a>
+<a role="tab" href="#imagenes" data-tab="imagenes" aria-selected="false">{s['tab_img']}</a>
+<a role="tab" href="#codigo" data-tab="codigo" aria-selected="false">{s['tab_code']}</a></div>
+<a class="more" href="{href(lang, rel, lang, 'about')}">{esc(s['more_about'])}</a>
+<span class="gr"><a href="{switch_href}" hreflang="{other}" lang="{other}">{esc(s['other_name'])}</a><a href="{esc(gh)}" rel="noopener">GitHub</a></span>
+</nav>
 <header class="top">
 <a class="logo" href="{href(lang, rel, lang, '')}" aria-label="Cambeiro">{logo()}</a>
 <form id="f" class="box" role="search" autocomplete="off">
-<input id="q" name="q" type="search" value="{esc(qvalue)}" aria-label="{esc(s['search_label'])}" spellcheck="false">
-<button type="submit" aria-label="{esc(s['search_btn'])}"><svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><circle cx="10" cy="10" r="6.5" fill="none" stroke="currentColor" stroke-width="2.4"/><path d="M15 15l6 6" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"/></svg></button>
+<input id="q" name="q" type="search" value="{esc(qvalue)}" aria-label="{esc(s['search_label'])}" spellcheck="false" size="38">
+<button type="submit" class="sb">{esc(s['search_btn'])}</button>
+<button type="button" id="lucky" class="sb lucky">{esc(s['lucky'])}</button>
 </form>
 </header>"""
-
-
-def profile_hay(lang, prof):
-    return norm(" ".join([prof["name"], prof["role"][lang], prof["bio"][lang], " ".join(prof["skills"]),
-                          " ".join(prof["education"][lang]), " ".join(prof["experience"][lang])]))
 
 
 def contact_links(lang, rel, prof, email_text=False):
@@ -246,20 +311,6 @@ def contact_links(lang, rel, prof, email_text=False):
     return ln
 
 
-def profile_result(lang, rel, prof):
-    s = STR[lang]
-    page = href(lang, rel, lang, "about")
-    sl = [f'<a href="{page}">{esc(s["view_page"])}</a>'] + contact_links(lang, rel, prof)
-    return f"""<article class="res" data-hay="{esc(profile_hay(lang, prof))}">
-<div class="rt"><div class="u">{esc(prof['site_host'])} › {s['about_slug']}</div>
-<h2><a href="{page}">{esc(prof['name'])} · {esc(s['about_kind'])}</a></h2>
-<p>{esc(prof['bio'][lang])}</p>
-<p class="stk">{esc(prof['role'][lang])}</p>
-<p class="sl">{' · '.join(sl)}</p></div>
-<a class="th" href="{page}" tabindex="-1" aria-hidden="true"><img src="{asset(lang, rel, 'assets/covers/perfil.svg')}" alt="" width="400" height="300" loading="lazy"></a>
-</article>"""
-
-
 def cover_of(lang, rel, p):
     """Miniatura real si el proyecto tiene captura; si no, la portada abstracta provisional."""
     if p.get("shot"):
@@ -267,90 +318,94 @@ def cover_of(lang, rel, p):
     return asset(lang, rel, f"assets/covers/{p['slug']}.svg")
 
 
-def result(lang, rel, p, prof):
+def hay_of(p):
+    return norm(" ".join([p["title"], p["kind"][LANGS[0]], p["kind"][LANGS[1]], p["summary"][LANGS[0]], p["summary"][LANGS[1]],
+                          " ".join(p["stack"]), " ".join(p["features"][LANGS[0]]), " ".join(p["features"][LANGS[1]])]))
+
+
+def kbytes(n):
+    return max(1, round(n / 1024))
+
+
+def result(lang, rel, p, prof, sizes):
+    """Resultado al estilo de 2004: titulo azul subrayado, fragmento, URL verde - tamano - enlaces."""
     s = STR[lang]
     page = href(lang, rel, lang, f"p/{p['slug']}")
-    cover = cover_of(lang, rel, p)
     hay = norm(" ".join([p["title"], p["kind"][lang], p["summary"][lang], " ".join(p["stack"]), " ".join(p["features"][lang])]))
-    sl = [f'<a href="{page}">{esc(s["view_page"])}</a>', f'<a href="{esc(p["links"]["repo"])}" rel="noopener">{esc(s["repo"])}</a>']
-    if p["links"]["demo"]:
-        sl.append(f'<a href="{esc(p["links"]["demo"])}" rel="noopener">{esc(s["demo"])}</a>')
+    disp = f"{prof['site_host']}/{page_dir(lang, 'p/' + p['slug'])}/"
+    sim = fill(s["related_q"], x=p["stack"][0])
+    snippet = f"{esc(p['summary'][lang])} ... {esc(', '.join(p['stack'][:5]))}"
+    sls = ""
+    if p.get("featured"):
+        cells = ""
+        for (lab, desc), h in zip(p["sitelinks"][lang], p["sitelink_hrefs"]):
+            target = esc(p["links"]["repo"]) if h == "repo" else page + h
+            ext = ' rel="noopener"' if h == "repo" else ""
+            cells += f'<div><a href="{target}"{ext}>{esc(lab)}</a><br><span>{esc(desc)}</span></div>'
+        sls = f'<div class="sls">{cells}</div>'
     return f"""<article class="res" data-hay="{esc(hay)}">
-<div class="rt"><div class="u">{esc(prof['site_host'])} › {'proyectos' if lang == 'es' else 'projects'} › {esc(p['slug'])}</div>
-<h2><a href="{page}">{esc(p['title'])} · {esc(p['kind'][lang])}</a></h2>
-<p>{esc(p['summary'][lang])}</p>
-<p class="stk">{esc(' · '.join(p['stack'][:5]))}</p>
-<p class="sl">{' · '.join(sl)}</p></div>
-<a class="th" href="{page}" tabindex="-1" aria-hidden="true"><img src="{cover}" alt="" width="400" height="300" loading="lazy"></a>
+<a class="th" href="{page}" tabindex="-1" aria-hidden="true"><img src="{cover_of(lang, rel, p)}" alt="" width="400" height="300" loading="lazy"></a>
+<h2><a href="{page}" data-b>{esc(p['title'])} - {esc(p['kind'][lang])}</a></h2>
+<p class="sn" data-b>{snippet}</p>
+{sls}<p class="ul"><span class="a">{esc(disp)} - {sizes[(lang, p['slug'])]}k - </span><a class="fl" href="{esc(p['links']['repo'])}" rel="noopener">{esc(s['repo'])}</a> - <a class="fl" href="?q={quote(sim)}" data-q="{esc(sim)}">{esc(s['similar'])}</a></p>
 </article>"""
 
 
-def figure(lang, rel, p):
+def figure(lang, rel, p, prof):
+    """Celda de busqueda de imagenes clasica: miniatura, nombre, dimensiones y URL."""
     s = STR[lang]
     page = href(lang, rel, lang, f"p/{p['slug']}")
-    cover = cover_of(lang, rel, p)
     hay = norm(" ".join([p["title"], p["kind"][lang], p["summary"][lang], " ".join(p["stack"])]))
-    return (f'<figure class="fig" data-hay="{esc(hay)}"><a href="{page}"><img src="{cover}" alt="{esc(fill(s["cover_alt"], t=p["title"]))}" width="400" height="300" loading="lazy"></a>'
-            f'<figcaption><a href="{page}">{esc(p["title"])}</a><span>{esc(p["kind"][lang])}</span></figcaption></figure>')
+    sh = p.get("shot")
+    thumb = sh["thumb"] if sh else f"assets/covers/{p['slug']}.svg"
+    path = os.path.join(ROOT, thumb)
+    w, h = (400, 300) if not sh else (sh["w"], sh["h"])
+    dims = fill(s["sz_px"], w=w, h=h, k=kbytes(os.path.getsize(path)) if os.path.exists(path) else 1)
+    return (f'<figure class="fig" data-hay="{esc(hay)}"><a href="{page}"><img src="{cover_of(lang, rel, p)}" alt="{esc(fill(s["cover_alt"], t=p["title"]))}" width="400" height="300" loading="lazy"></a>'
+            f'<figcaption><a href="{page}" data-b>{esc(p["title"])}</a><span class="d">{esc(dims)}</span>'
+            f'<span class="a">{esc(prof["site_host"])}</span></figcaption></figure>')
 
 
 def code_row(lang, p):
     hay = norm(" ".join([p["title"], p["kind"][lang], p["summary"][lang], " ".join(p["stack"])]))
     repo = p["links"]["repo"]
     path = repo.replace("https://github.com/", "")
-    return (f'<div class="code" data-hay="{esc(hay)}"><a href="{esc(repo)}" rel="noopener">{esc(path)}</a>'
-            f'<p>{esc(p["summary"][lang])}</p><p class="stk">{esc(" · ".join(p["stack"]))}</p></div>')
+    return (f'<div class="code" data-hay="{esc(hay)}"><a href="{esc(repo)}" rel="noopener" data-b>{esc(path)}</a>'
+            f'<p data-b>{esc(p["summary"][lang])}</p><p class="stk" data-b>{esc(" · ".join(p["stack"]))}</p></div>')
 
 
-def profile_figure(lang, rel, prof):
-    s = STR[lang]
-    page = href(lang, rel, lang, "about")
-    return (f'<figure class="fig" data-hay="{esc(profile_hay(lang, prof))}"><a href="{page}"><img src="{asset(lang, rel, "assets/covers/perfil.svg")}" alt="" width="400" height="300" loading="lazy"></a>'
-            f'<figcaption><a href="{page}">{esc(prof["name"])}</a><span>{esc(s["about_kind"])}</span></figcaption></figure>')
+def ads(lang, rel, prof):
+    """Columna de 'enlaces patrocinados': el perfil de Damian como anuncios (contacto, CV, LinkedIn)."""
+    s, L = STR[lang], prof["links"]
+    host = prof["site_host"]
+    kw = dict(name=prof["name"], first=prof["first_name"])
+    items = [
+        (href(lang, rel, lang, "about"), "ad1", f"{host}/{page_dir(lang, 'about')}/", ""),
+        (asset(lang, rel, L["cv"]), "ad2", f"{host}/{L['cv']} - {file_kb(L['cv']).replace(' KB', 'k')}", ""),
+        (f"mailto:{L['email']}", "ad3", L["email"], ""),
+        (L["linkedin"], "ad4", L["linkedin"].replace("https://www.", ""), ' rel="noopener"'),
+    ]
+    out = ""
+    for url, k, disp, ext in items:
+        out += (f'<div class="ad"><p class="adt"><a href="{esc(url)}"{ext}>{esc(fill(s[k + "_t"], **kw))}</a></p>'
+                f'<p>{esc(s[k + "_a"])}<br>{esc(s[k + "_b"])}</p><p class="au">{esc(disp)}</p></div>')
+    return f'<aside class="ads" aria-label="{esc(s["ads_h"])}"><p class="adh">{esc(s["ads_h"])}</p>{out}</aside>'
 
 
-def profile_code(lang, prof):
-    gh = prof["links"]["github"]
-    return (f'<div class="code" data-hay="{esc(profile_hay(lang, prof))}"><a href="{esc(gh)}" rel="noopener">{esc(gh.replace("https://", ""))}</a>'
-            f'<p>{esc(prof["role"][lang])}</p><p class="stk">{esc(" · ".join(prof["skills"]))}</p></div>')
+def classic_footer(lang, rel, prof, alt_href):
+    s, L = STR[lang], prof["links"]
+    nav = " - ".join([
+        f'<a href="{href(lang, rel, lang, "about")}">{esc(s["util_about"])}</a>',
+        f'<a href="{alt_href}" hreflang="{"en" if lang == "es" else "es"}">{esc(s["other_name"])}</a>',
+        f'<a href="{esc(L["linkedin"])}" rel="noopener">{s["link_linkedin"]}</a>',
+        f'<a href="mailto:{esc(L["email"])}">{s["link_email"]}</a>',
+        f'<a href="{asset(lang, rel, L["cv"])}">{s["link_cv"]}</a>',
+        f'<a href="{esc(L["github"])}" rel="noopener">GitHub</a>'])
+    return f"""<footer class="ft"><p class="fnav">{nav}</p>
+<p class="cp">© 2026 {esc(prof['name'])}</p><p class="fn">{esc(s['footer_note'])}</p></footer>"""
 
 
-def avatar_svg(initials):
-    return ('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300" role="img"><rect width="400" height="300" fill="#4d90fe"/>'
-            f'<text x="200" y="198" font-family="Georgia,serif" font-weight="700" font-size="140" text-anchor="middle" fill="#fff">{esc(initials)}</text></svg>')
-
-
-def about_page(lang, prof):
-    s = STR[lang]
-    rel = "about"
-    alts = {l: absurl(l, rel) for l in LANGS}
-    css = [asset(lang, rel, "assets/buscador.css"), asset(lang, rel, "skins/base.css")]
-    other = "en" if lang == "es" else "es"
-    ln = contact_links(lang, rel, prof, email_text=True)
-    edu = "".join(f"<li>{esc(x)}</li>" for x in prof["education"][lang])
-    exp = "".join(f"<li>{esc(x)}</li>" for x in prof["experience"][lang])
-    chips = "".join(f"<li>{esc(t)}</li>" for t in prof["skills"])
-    body = f"""<body class="skin-base">
-<header class="ptop"><a href="{href(lang, rel, lang, '')}">{esc(s['back'])}</a>
-<a class="lang" href="{href(lang, rel, other, rel)}" hreflang="{other}" lang="{other}">{esc(s['other_name'])}</a></header>
-<main class="proj">
-<p class="kind">{esc(s['about_kind'])}</p>
-<h1>{esc(prof['name'])}</h1>
-<p class="lead">{esc(prof['role'][lang])}</p>
-<p>{esc(prof['bio'][lang])}</p>
-<h2>{esc(s['card_edu'])}</h2><ul>{edu}</ul>
-<h2>{esc(s['card_exp'])}</h2><ul>{exp}</ul>
-<h2>{esc(s['card_lang'])}</h2><p>{esc(prof['languages'][lang])}</p>
-<h2>{esc(s['card_tools'])}</h2><ul class="chips">{chips}</ul>
-<h2>{esc(s['card_links'])}</h2><p>{' · '.join(ln)}</p>
-</main>
-<footer class="ft"><p>© 2026 {esc(prof['name'])}</p></footer>
-</body></html>"""
-    title = f"{prof['name']} - {s['about_kind']} - Cambeiro"
-    return head(lang, rel, title, prof["bio"][lang], alts, css) + body
-
-
-def home(lang, prof, projects):
+def home(lang, prof, projects, sizes):
     s = STR[lang]
     rel = ""
     qdef = fill(s["default_q"], name=prof["first_name"])
@@ -358,53 +413,147 @@ def home(lang, prof, projects):
     alts = {l: absurl(l, rel) for l in LANGS}
     css = [asset(lang, rel, "assets/buscador.css")]
     stop = sorted(set(norm(w) for w in s["stop"]) | set(norm(prof["name"]).split()))
-    cfg = {"stop": stop, "def": qdef, "one": s["count_one"], "many": s["count_many"]}
+    n = len(projects)
+    cfg = {"stop": stop, "def": qdef, "one": s["bar_one"], "many": s["bar_many"], "tail": s["bar_tail"], "none": s["none_q"]}
 
-    # busquedas relacionadas: tecnologias mas repetidas, luego las primeras de cada proyecto
-    counts = {}
+    counts, shown = {}, {}
     for p in projects:
         for t in p["stack"]:
-            counts[t] = counts.get(t, 0) + 1
-    rel_terms = sorted(counts, key=lambda t: (-counts[t], t.lower()))[:8]
+            k = t.lower()
+            shown.setdefault(k, t)
+            counts[k] = counts.get(k, 0) + 1
+    rel_terms = [shown[k] for k in sorted(counts, key=lambda k: (-counts[k], k))[:8]]
     related = "".join(
-        f'<li><a href="#" data-q="{esc(fill(s["related_q"], x=t))}">{esc(fill(s["related_q"], x=t))}</a></li>' for t in rel_terms
+        f'<li><a href="?q={quote(fill(s["related_q"], x=t))}" data-q="{esc(fill(s["related_q"], x=t))}">{esc(fill(s["related_q"], x=t))}</a></li>' for t in rel_terms
     )
-    results = profile_result(lang, rel, prof) + "".join(result(lang, rel, p, prof) for p in projects)
-    figs = profile_figure(lang, rel, prof) + "".join(figure(lang, rel, p) for p in projects)
-    codes = profile_code(lang, prof) + "".join(code_row(lang, p) for p in projects)
+    results = "".join(result(lang, rel, p, prof, sizes) for p in projects)
+    figs = "".join(figure(lang, rel, p, prof) for p in projects)
+    codes = "".join(code_row(lang, p) for p in projects)
     tips = "".join(f"<li>{esc(fill(t, name=prof['first_name']))}</li>" for t in s["none_tips"])
-    n = len(projects) + 1  # proyectos + perfil
-    count = s["count_one"] if n == 1 else fill(s["count_many"], n=n)
+    L = prof["links"]
+    cols = LOGO_COLORS[:5] + [LOGO_COLORS[5]] * 5 + LOGO_COLORS[6:]
+    pager = (f'<div class="pager"><p class="pw" role="img" aria-label="{esc(s["pager_label"])}">'
+             + "".join(f'<span aria-hidden="true" style="color:{c}">{ch}</span>' for ch, c in zip("Cambeiiiiiro", cols))
+             + f'</p><p class="pn">{esc(s["pager_res"])} <b>1</b></p></div>')
+    count0 = f'{fill(s["bar_many"], n=n)}'
 
     body = f"""<body>
 <div class="sr">
 {header(lang, rel, prof, qdef, alt_href)}
-<section class="tabs2" aria-label="{esc(s['tabs_label'])}"><div role="tablist" aria-label="{esc(s['tabs_label'])}">
-<a role="tab" href="#todo" data-tab="todo" aria-selected="true">{s['tab_all']}</a>
-<a role="tab" href="#imagenes" data-tab="imagenes" aria-selected="false">{s['tab_img']}</a>
-<a role="tab" href="#codigo" data-tab="codigo" aria-selected="false">{s['tab_code']}</a></div>
-<button type="button" id="lucky" class="lucky">{esc(s['lucky'])}</button></section>
+<section class="bar" aria-label="{esc(s['pager_note'])}"><b id="tabname">{s['tab_all']}</b><p id="cnt" class="cnt" aria-live="polite">{esc(count0)} <b>{esc(qdef)}</b>. {esc(s['bar_tail'])}</p></section>
+<div class="cols">
 <main data-tab="todo">
 <h1 class="vh">{esc(fill(s['home_h1'], name=prof['name']))}</h1>
-<p id="cnt" class="cnt" aria-live="polite">{esc(count)}</p>
-<div id="none" class="none" hidden><p><b>{esc(s['none_title'])}</b></p><ul>{tips}</ul></div>
-<section id="p-todo">{results}</section>
+<p class="dyp"><span>{esc(s['didyou'])}</span> <a href="mailto:{esc(L['email'])}"><b><i>{esc(s['didyou_link'])}</i></b></a></p>
+<div id="none" class="none" hidden><p id="nonetxt"></p><p>{esc(s['none_sug'])}</p><ul>{tips}</ul></div>
+<section id="p-todo" aria-label="{esc(s['tab_all'])}">{results}</section>
 <section id="p-imagenes" class="igrid" aria-label="{esc(s['tab_img'])}">{figs}</section>
 <section id="p-codigo" aria-label="{esc(s['code_hint'])}">{codes}</section>
 <section class="rel" id="rel"><h2>{esc(s['related'])}</h2><ul>{related}</ul></section>
+{pager}
 </main>
-<footer class="ft">
-<p class="pager" aria-label="{esc(s['pager_note'])}"><span class="pl">{logo()}</span><span class="pn">1</span></p>
-<p><a href="{href(lang, rel, lang, 'about')}">{esc(s['util_about'])}</a> · <a href="{alt_href}" hreflang="{'en' if lang == 'es' else 'es'}">{esc(s['other_name'])}</a> · {' · '.join(contact_links(lang, rel, prof)[:3])}</p>
-<p>{esc(s['footer_note'])}</p><p>© 2026 {esc(prof['name'])}</p>
-</footer>
+{ads(lang, rel, prof)}
+</div>
+{classic_footer(lang, rel, prof, alt_href)}
 </div>
 <script type="application/json" id="cfg">{json.dumps(cfg, ensure_ascii=False).replace("</", "<\\/")}</script>
 <script src="{asset(lang, rel, 'assets/buscador.js')}" defer></script>
 </body></html>"""
     desc = fill(s["meta_home"], name=prof["name"])
     title = f"{qdef} - Cambeiro"
-    return head(lang, rel, title, desc, alts, css) + body
+    return head(lang, rel, title, desc, alts, css, font_preload(lang, rel)) + body
+
+
+# ----------------------------------------------------------------------- Sobre mi
+def render_cv(cv, terms=("python", "sql")):
+    """Folio HTML con el texto real del CV; resalta terminos (como las copias en cache)."""
+    pat = re.compile("(?i)(" + "|".join(re.escape(t) for t in terms) + ")")
+    idx = {t.lower(): i for i, t in enumerate(terms)}
+
+    def mark(text):
+        parts = re.split(r"(<[^>]+>)", rich(text))
+        return "".join(p if p.startswith("<") else pat.sub(lambda m: f'<mark class="m{idx[m.group(1).lower()]}">{m.group(1)}</mark>', p) for p in parts)
+
+    out = [f'<p class="nm">{esc(cv["name"])}</p><p class="rl">{mark(cv["role"])}</p>'
+           f'<p class="ct">{esc(cv["contact"])}</p><p class="lc">{esc(cv["loc"])}</p>']
+    for sec in cv["sections"]:
+        out.append(f'<section id="cv-{sec["id"]}" data-s="{sec["id"]}"><p class="h">{esc(sec["title"])}</p>')
+        for b in sec["blocks"]:
+            if "p" in b:
+                out.append(f"<p>{mark(b['p'])}</p>")
+            elif "row" in b:
+                out.append(f'<p class="row"><span>{mark(b["row"][0])}</span><span>{esc(b["row"][1])}</span></p>')
+            elif "ul" in b:
+                out.append("<ul>" + "".join(f"<li>{mark(x)}</li>" for x in b["ul"]) + "</ul>")
+            elif "sub" in b:
+                out.append(f'<p class="sub">{esc(b["sub"])}</p>')
+        out.append("</section>")
+    return "".join(out)
+
+
+def about_page(lang, prof, projects):
+    s = STR[lang]
+    rel = "about"
+    alts = {l: absurl(l, rel) for l in LANGS}
+    css = [asset(lang, rel, "assets/buscador.css"), asset(lang, rel, "assets/perfil.css")]
+    other = "en" if lang == "es" else "es"
+    L = prof["links"]
+    cv_url = asset(lang, rel, L["cv"])
+    size = file_kb(L["cv"])
+    home_h = href(lang, rel, lang, "")
+    cv = load("cv.json")
+
+    path = ""
+    for it in prof["path"][lang]:
+        txt = f'<p class="sn">{esc(it["text"])}</p>' if it.get("text") else ""
+        path += (f'<div class="tr" data-s="{it["s"]}"><p class="u">{esc(it["when"])}</p>'
+                 f'<h3><a href="#cv-{it["s"]}">{esc(it["title"])}</a></h3>{txt}</div>')
+    counts, shown = {}, {}
+    for p in projects:
+        for t in p["stack"]:
+            k = t.lower()
+            shown.setdefault(k, t)
+            counts[k] = counts.get(k, 0) + 1
+    tools = ""
+    for key in sorted(counts, key=lambda k: (-counts[k], k))[:8]:
+        t, k = shown[key], counts[key]
+        q = fill(s["related_q"], x=t)
+        c = s["n_proj_one"] if k == 1 else fill(s["n_proj_many"], n=k)
+        tools += (f'<li><a class="rq" href="{home_h}?q={quote(q)}"><svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true">'
+                  f'<circle cx="10" cy="10" r="6.5" fill="none" stroke="currentColor" stroke-width="2.4"/><path d="M15 15l6 6" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/></svg>'
+                  f'<span>{esc(t.lower())} · {esc(c)}</span></a></li>')
+    banner = fill(s["cache_banner"], url=cv_url, file=esc(os.path.basename(L["cv"])), date=esc(fmt_date(lang, prof["cv_date"])))
+    data = (f'data-terms="python,sql" data-label="{esc(s["terms_label"])}" data-ph="{esc(s["term_ph"])}" '
+            f'data-rm="{esc(s["term_rm"])}" data-add="{esc(s["term_add"])}"')
+    body = f"""<body class="ab">
+<div class="split">
+<div class="lft">
+<header class="abar"><a class="logo sm" href="{home_h}" aria-label="Cambeiro">{logo()}</a>
+<p class="nav"><a href="{home_h}">{esc(s['ab_back'])}</a><a href="{href(lang, rel, other, rel)}" hreflang="{other}" lang="{other}">{esc(s['other_name'])}</a></p></header>
+<main>
+<section class="hero" data-s="perfil"><h1>{esc(prof['name'])}</h1>
+<p class="rl">{esc(prof['role_short'][lang])}. {esc(prof['location'][lang])}.</p>
+<p class="in">{esc(prof['intro'][lang])}</p>
+<p class="bs"><a class="pbtn p" href="{cv_url}" download>{esc(fill(s['dl_cv'], size=size))}</a><a class="pbtn" href="{esc(L['linkedin'])}" rel="noopener">{s['link_linkedin']}</a><a class="pbtn" href="mailto:{esc(L['email'])}">{s['link_email']}</a><a class="pbtn" href="{esc(L['github'])}" rel="noopener">GitHub</a></p></section>
+<section class="blk"><h2>{esc(s['ab_path'])}</h2>{path}</section>
+<section class="blk" data-s="tecnicas"><h2>{esc(s['ab_tools'])}</h2><p class="sn mut">{esc(s['ab_tools_p'])}</p><ul class="rels">{tools}</ul></section>
+<section class="blk tr" data-s="idiomas"><h2>{esc(s['ab_lang'])}</h2><p class="sn">{esc(prof['languages'][lang])}</p></section>
+<section class="dym"><p class="fr">{esc(s['didyou'])} <a href="mailto:{esc(L['email'])}">{esc(s['didyou_link'])}</a></p><p class="sn">{esc(s['ab_hire_p'])}</p>
+<p class="bs"><a class="pbtn p" href="mailto:{esc(L['email'])}">{esc(s['ab_mail'])}</a><a class="pbtn" href="{esc(L['linkedin'])}" rel="noopener">{esc(s['ab_li'])}</a></p></section>
+</main>
+</div>
+<aside class="stage" aria-label="{esc(s['folio_label'])}"><div class="sin">
+<p class="banner">{banner}</p>
+<div class="terms" {data} hidden></div>
+<p class="bs"><a class="sbtn p" href="{cv_url}">{esc(s['open_pdf'])}</a><a class="sbtn" href="{cv_url}" download>{esc(fill(s['dl_pdf'], size=size))}</a></p>
+<div class="paper"><article class="sheet" lang="es" aria-label="{esc(s['folio_label'])}"><div class="cv">{render_cv(cv)}</div></article></div>
+<p class="seecv"><a class="sbtn p" href="{cv_url}">{esc(s['see_cv'])}</a></p>
+</div></aside>
+</div>
+<script src="{asset(lang, rel, 'assets/perfil.js')}" defer></script>
+</body></html>"""
+    title = f"{prof['name']} - {s['about_kind']} - Cambeiro"
+    return head(lang, rel, title, prof["bio"][lang], alts, css, font_preload(lang, rel)) + body
 
 
 def project_extra(lang, prof, p, skin):
@@ -414,7 +563,7 @@ def project_extra(lang, prof, p, skin):
     other = "en" if lang == "es" else "es"
     c = dict(lang=lang, s=s, slug=p["slug"], title=p["title"], kind=p["kind"][lang], summary=p["summary"][lang],
              feats=p["features"][lang], facts=p["facts"][lang], stack=p["stack"], note=p["note"][lang],
-             repo=p["links"]["repo"], demo=p["links"]["demo"], home=href(lang, rel, lang, ""), other=other,
+             repo=p["links"]["repo"], home=href(lang, rel, lang, ""), other=other,
              other_h=href(lang, rel, other, rel), name=prof["name"], author=prof["first_name"], initials=prof["initials"],
              asset_js=asset(lang, rel, "assets/reloc.js"), shot=(dict(src=asset(lang, rel, p["shot"]["full"]), w=p["shot"]["w"], h=p["shot"]["h"], alt=p["shot"]["alt"][lang], cap=p["shot"]["cap"][lang]) if p.get("shot") else None), asset_data=asset(lang, rel, "assets/reloc-data.js"))
     alts = {l: absurl(l, rel) for l in LANGS}
@@ -435,8 +584,6 @@ def project_page(lang, prof, p):
     facts = "".join(f"<li>{esc(x)}</li>" for x in p["facts"][lang])
     chips = "".join(f"<li>{esc(t)}</li>" for t in p["stack"])
     btns = f'<a class="btn" href="{esc(p["links"]["repo"])}" rel="noopener">{esc(s["btn_repo"])}</a>'
-    if p["links"]["demo"]:
-        btns += f' <a class="btn alt" href="{esc(p["links"]["demo"])}" rel="noopener">{esc(s["btn_demo"])}</a>'
     cover = cover_of(lang, rel, p)
     body = f"""<body class="skin-base">
 <header class="ptop"><a href="{href(lang, rel, lang, '')}">{esc(s['back'])}</a>
@@ -512,12 +659,15 @@ def build():
     for p in projects:
         if not p.get("shot"):
             write(f"assets/covers/{p['slug']}.svg", cover_svg(p["cover"], p["slug"]))
-    write("assets/covers/perfil.svg", avatar_svg(prof["initials"]))
+    sizes = {}
     for lang in LANGS:
-        write(posixpath.join(page_dir(lang, "about"), "index.html"), about_page(lang, prof))
-        write(posixpath.join(page_dir(lang, ""), "index.html"), home(lang, prof, projects))
         for p in projects:
-            write(posixpath.join(page_dir(lang, f"p/{p['slug']}"), "index.html"), project_page(lang, prof, p))
+            html = project_page(lang, prof, p)
+            sizes[(lang, p["slug"])] = kbytes(len(html.encode("utf-8")))
+            write(posixpath.join(page_dir(lang, f"p/{p['slug']}"), "index.html"), html)
+    for lang in LANGS:
+        write(posixpath.join(page_dir(lang, "about"), "index.html"), about_page(lang, prof, projects))
+        write(posixpath.join(page_dir(lang, ""), "index.html"), home(lang, prof, projects, sizes))
     write("404.html", not_found(prof))
     write(".nojekyll", "")
     write("robots.txt", f"User-agent: *\nAllow: /\n\nSitemap: {SITE}/sitemap.xml\n")

@@ -4,9 +4,11 @@ Portfolio estático para GitHub Pages con forma de buscador clásico. Cada proye
 
 ## Estructura
 - `data/projects.json`: los proyectos (textos en `es` y `en`). Es la única fuente de contenido.
-- `data/profile.json`: perfil, formación y enlaces. Los enlaces en `null` (LinkedIn, correo, CV) no se muestran hasta que se rellenen.
+- `data/profile.json`: perfil, trayectoria, enlaces, fecha de la copia en caché del CV (`cv_date`) y textos del panel. `data/cv.json`: el texto real del CV (en español) con el que se dibuja el folio de «Sobre mí»; hay que mantenerlo igual que `assets/cv/Damian_Cambeiro_CV.pdf`.
 - `tools/build.py`: genera todas las páginas HTML y las portadas provisionales (`assets/covers/*.svg`). Solo usa la biblioteca estándar de Python.
-- `assets/buscador.css`, `assets/buscador.js`: estilos y comportamiento de la portada (filtro en vivo, pestañas, «Voy a tener suerte»).
+- `assets/buscador.css`, `assets/buscador.js`: la portada como una página de resultados del Google de 2004: pestañas Web/Imágenes/Código arriba, logo con botones de sistema, barra azul «Resultados 1 - 3 de 3 de …», «Quizás quisiste decir», resultados con título azul subrayado, fragmento con los términos buscados en negrita, URL verde con tamaño real de la página («16k»), «Repositorio - Páginas similares», enlaces de sección en dos columnas, columna de «Enlaces patrocinados» (tu contacto, CV y LinkedIn como anuncios), «Cambeiiiiiro» y pie centrado. Filtro en vivo, `?q=` y «Voy a tener suerte». Única concesión moderna: una miniatura pequeña por resultado.
+- `assets/perfil.css`, `assets/perfil.js`: «Sobre mí» como escenario partido. A la izquierda la trayectoria; a la derecha el folio del CV (HTML con el texto real) sobre mesa azul noche, con resaltado de términos (python y sql de serie, editable) y sincronizado con la sección que se lee.
+- `assets/fonts/`: Fraunces, Arimo y Carlito (latin, woff2) alojadas en el repositorio, con sus licencias (OFL/Apache). Ninguna petición a terceros.
 - `skins/`: pieles de las páginas de proyecto. Cada proyecto elige la suya con el campo `skin` de `projects.json`: `base` (neutra), `player` (Reproductor 2000, en `tools/skins.py`) y `reloc` (RelocationDevs como buscador de los 2000, en `tools/reloc_skin.py` + `assets/reloc.js` + `skins/reloc.css`).
 - `tools/prep_reloc.py`: lee dos CSV del repositorio de RelocationDevs (`cities_processed.csv`, `salaries.csv`) y escribe `data/relocation.json` y `assets/reloc-data.js`. `tools/prep_land.js` genera `data/land.txt` (contorno de continentes, Natural Earth 110m, dominio público). Solo hace falta repetirlos si cambian los datos.
 - `tests/smoke.py` (portada) y `tests/reloc_smoke.py` (página de RelocationDevs): pruebas con Playwright en escritorio y móvil, ES y EN. `tests/hygiene.py` (solo stdlib) comprueba `hreflang`/canonical absolutos, `og:image`, `h1`/`main`, `robots.txt`, `sitemap.xml` y que no haya enlaces internos rotos.
@@ -24,7 +26,7 @@ python tools/prep_reloc.py <ruta/RelocationDevs>   # solo si cambian los datos
 Para publicar: subir la carpeta a un repositorio `Udamian.github.io` (o activar Pages en otro) y comprobar `base_path` en `data/profile.json`.
 
 ## Añadir un proyecto
-1. Añadir una entrada en `data/projects.json` (slug, textos es/en, stack, enlaces).
+1. Añadir una entrada en `data/projects.json` (slug, textos es/en, stack, enlace al repositorio y, si hay, `shot` con la captura real). No hay enlaces a demos.
 2. Ejecutar `python tools/build.py`.
 
 ## Vista previa para Artifact

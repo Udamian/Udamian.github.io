@@ -26,7 +26,7 @@ def player(c):
     t = T[c["lang"]]
     s = c["s"]
     bars = "".join(f'<i style="--d:{(i * 37) % 11}"></i>' for i in range(18))
-    play = c["demo"] or c["repo"]
+    play = c["repo"]
     sh = c.get("shot")
     shot = (f'<section class="box"><h2>{esc(t["shot"])}</h2><figure class="shot"><a href="{esc(sh["src"])}" title="{esc(t["shot_open"])}">'
             f'<img src="{esc(sh["src"])}" alt="{esc(sh["alt"])}" width="{sh["w"]}" height="{sh["h"]}" loading="lazy"></a>'

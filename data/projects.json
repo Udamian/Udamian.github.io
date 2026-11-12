@@ -16,8 +16,7 @@
       "Folium"
     ],
     "links": {
-      "repo": "https://github.com/Udamian/RelocationDevs",
-      "demo": null
+      "repo": "https://github.com/Udamian/RelocationDevs"
     },
     "summary": {
       "es": "Plataforma de apoyo a la decisión para profesionales tech que valoran en qué ciudad vivir fuera de su país: combina salario esperado, coste de vida, impuestos y mercado laboral.",
@@ -71,7 +70,56 @@
         "es": "Captura real de la app original en Streamlit (tema Midnight Silver).",
         "en": "Real screenshot of the original Streamlit app (Midnight Silver theme)."
       }
-    }
+    },
+    "stats": {
+      "es": "**578** ciudades · **18.112** respuestas de desarrolladores · **149** países",
+      "en": "**578** cities · **18,112** developer answers · **149** countries"
+    },
+    "sitelinks": {
+      "es": [
+        [
+          "Mapa de ciudades",
+          "324 ciudades con coordenadas"
+        ],
+        [
+          "Comparar ciudades",
+          "Hasta tres a la vez, con la fórmula a la vista"
+        ],
+        [
+          "Salarios dev",
+          "Medianas por país y rol (n ≥ 10)"
+        ],
+        [
+          "Repositorio",
+          "Código, datos y cómo ejecutarlo"
+        ]
+      ],
+      "en": [
+        [
+          "City map",
+          "324 cities with coordinates"
+        ],
+        [
+          "Compare cities",
+          "Up to three at once, formula in view"
+        ],
+        [
+          "Dev salaries",
+          "Medians by country and role (n ≥ 10)"
+        ],
+        [
+          "Repository",
+          "Code, data and how to run it"
+        ]
+      ]
+    },
+    "sitelink_hrefs": [
+      "#/map",
+      "#/cmp/",
+      "#/sal",
+      "repo"
+    ],
+    "featured": true
   },
   {
     "slug": "job-tracker",
@@ -92,8 +140,7 @@
       "pytest"
     ],
     "links": {
-      "repo": "https://github.com/Udamian/job-tracker",
-      "demo": null
+      "repo": "https://github.com/Udamian/job-tracker"
     },
     "summary": {
       "es": "Seguimiento personal de candidaturas de empleo con estadísticas: tasas de respuesta y embudo de selección.",
@@ -148,8 +195,7 @@
       "Spicetify"
     ],
     "links": {
-      "repo": "https://github.com/Udamian/spicetify-ytm-sync",
-      "demo": null
+      "repo": "https://github.com/Udamian/spicetify-ytm-sync"
     },
     "summary": {
       "es": "Mantiene una playlist de Spotify (o tus Me gusta) copiada y en el mismo orden en YouTube Music. App personalizada de Spicetify con un ayudante local en Python.",

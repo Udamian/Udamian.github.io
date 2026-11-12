@@ -54,6 +54,15 @@ with sync_playwright() as p:
             pg.goto(B + base + "#/b?mr=300"); check(pg.locator("li.rs").count() > 0, f"{tag} filtro alquiler")
             # ciudad
             pg.goto(B + base + "#/c/1"); check("Zurich" in pg.inner_text("#cy") and "94" in pg.inner_text("#cy"), f"{tag} detalle Zurich")
+            check(pg.locator(".fh .fnum").count() == 1 and pg.locator(".fbar i").count() == 4, f"{tag} ficha con puntuacion grande y barra de 4 factores")
+            pg.goto(B + base + "#/c/323"); sc = pg.inner_text(".fnum").replace(",", ".")
+            parts = [float(x.replace(",", ".")) for x in pg.inner_text(".fsum").split("=")[0].replace("Suma:", "").replace("Sum:", "").split("+")]
+            check(abs(sum(parts) - float(sc)) < 0.02, f"{tag} la suma de la barra coincide con la puntuacion ({sc})")
+            pg.goto(B + base); pg.wait_for_selector("#hm .hd")
+            check(pg.locator("#hm .hd").count() == 324 and pg.locator("#hm .vg").count() == 1, f"{tag} mapa de puntos con 324 ciudades y marca")
+            pg.fill("#pq", "spain"); lit = pg.locator("#hm .hd.on").count()
+            check(0 < lit < 30 and pg.locator("#hm.q").count() == 1, f"{tag} al escribir un pais se encienden sus puntos ({lit})")
+            pg.fill("#pq", ""); check(pg.locator("#hm.q").count() == 0, f"{tag} sin texto vuelve el estado inicial")
             check(ov(), f"{tag} ciudad sin overflow")
             # suerte
             pg.goto(B + base); pg.fill("#pq", "tokyo"); pg.click("#lucky")

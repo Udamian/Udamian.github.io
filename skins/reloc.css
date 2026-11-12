@@ -1,3 +1,4 @@
+@font-face{font-family:Fraunces;font-weight:800;font-style:normal;font-display:swap;src:url(../assets/fonts/fraunces-latin-800-normal.woff2) format("woff2")}
 /* Piel «RelocationDevs»: un buscador de ciudades de los 2000. Midnight Silver como acento (mapa, botones, barras). */
 *{box-sizing:border-box}
 body.skin-reloc{margin:0;background:#fff;color:#111;font:13px/1.45 Arial,Helvetica,sans-serif}
@@ -138,3 +139,29 @@ span.d.hi{background:#f5f5f7}span.d.md{background:#aeaeb2}span.d.lo{background:#
  .tb td{white-space:normal}
  .rs h2{font-size:16px}
 }
+
+/* portada: datos y mapa de puntos */
+.facts{margin:10px 0 0;font-size:14px;color:#333}
+.dots{background:#111;margin:22px 0 4px;padding:14px 12px 10px;text-align:left}
+#hm{display:block;width:100%;height:auto}
+#hm .hd{fill:#8e8e93}
+#hm.q .hd{fill:#3a3a3c}#hm.q .hd.on{fill:#fff}
+#hm.q .vg{display:none}
+#hm .vg circle,#hm .vg path{fill:none;stroke:#f5f5f7;stroke-width:.45}
+#hm .vg text{fill:#f5f5f7;font:5.6px Arial,Helvetica,sans-serif}
+.hmn{margin:8px 4px 0;font-size:13px;color:#d1d1d6}
+
+/* ficha: la puntuacion y de donde sale */
+.fh{background:#111;color:#f5f5f7;padding:22px 22px 24px;margin:0 0 16px}
+.ftop{display:flex;align-items:flex-end;justify-content:space-between;flex-wrap:wrap;gap:14px 32px}
+.fh h2.fn{margin:0;border:0;padding:0;color:#f5f5f7;font:800 clamp(30px,6vw,44px)/1 Fraunces,Georgia,serif;letter-spacing:-.03em}
+.fs{margin:6px 0 0;font-size:15px;color:#c7c7cc}
+.fsc{display:flex;align-items:flex-end;gap:14px}
+.fnum{margin:0;font:800 clamp(64px,16vw,132px)/.85 Fraunces,Georgia,serif;letter-spacing:-.05em;font-variant-numeric:lining-nums}
+.fcap{margin:0;font-size:14px;line-height:1.4;color:#c7c7cc;max-width:150px}.fcap b{color:#f5f5f7}
+.fbar{display:flex;height:34px;margin-top:22px}
+.fbar i{display:block;min-width:2px}
+.fleg{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px 14px;margin-top:12px;font-size:13px;line-height:1.4;color:#c7c7cc}
+.fleg>div{border-top:3px solid;padding-top:6px;min-width:0;overflow-wrap:anywhere}.fleg b{color:#f5f5f7}
+.fsum{margin:16px 0 0;font-size:14px;color:#f5f5f7}.fsum b{font-weight:700}
+@media (max-width:640px){.fleg{grid-template-columns:repeat(2,minmax(0,1fr))}}

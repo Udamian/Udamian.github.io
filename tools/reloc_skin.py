@@ -68,6 +68,12 @@ R = {
                   "rent": "Alquiler (€/mes)", "tax": "Impuestos (%)", "col": "Coste de vida (índice)", "pp": "Poder adquisitivo (neto ÷ coste de vida)",
                   "qol": "Calidad de vida", "job": "Mercado laboral", "sav": "Ahorro anual estimado (30 % del neto)", "ppi": "Poder adquisitivo (índice)"},
             "rank": "Puesto {r} de {n} por puntuación", "how": "Cómo sale la puntuación", "total": "Total",
+            "dots_h": "Mapa de puntos de las ciudades", "dots_aria": "Mapa de puntos con las {n} ciudades que tienen coordenadas",
+            "dots_p": "Cada punto es una ciudad del conjunto de datos con coordenadas ({n} de {t}). Al escribir un país o una región, sus puntos se encienden.",
+            "dots_hit": "{k} ciudades con coordenadas encendidas.", "dots_none": "Ninguna ciudad con coordenadas coincide con la búsqueda.",
+            "hm_rank": "{c} · puesto {r} de {n}",
+            "f_sum": "Suma:", "f_note": "La fórmula es la del modelo original; los pesos se pueden cambiar en la búsqueda avanzada.",
+            "f_aria": "Barra con la parte de cada factor en la puntuación",
             "lower": "(mejor si es menor)", "best": "mejor", "sim_h": "Ciudades parecidas", "sal_link": "Salarios de desarrolladores en {c}",
             "no_geo": "Esta ciudad no tiene coordenadas en los datos.", "see_map": "Ver en el mapa", "add_cmp": "Añadir a comparar",
             "cmp_need": "Añade al menos dos ciudades para ver la comparación.", "metric": "Métrica",
@@ -114,6 +120,12 @@ R = {
                   "rent": "Rent (€/month)", "tax": "Tax (%)", "col": "Cost of living (index)", "pp": "Purchasing power (net ÷ cost of living)",
                   "qol": "Quality of life", "job": "Job market", "sav": "Estimated annual savings (30% of net)", "ppi": "Purchasing power (index)"},
             "rank": "Rank {r} of {n} by score", "how": "How the score is made", "total": "Total",
+            "dots_h": "Dot map of the cities", "dots_aria": "Dot map of the {n} cities that have coordinates",
+            "dots_p": "Each dot is a city in the dataset with coordinates ({n} of {t}). Type a country or a region and its dots light up.",
+            "dots_hit": "{k} cities with coordinates lit.", "dots_none": "No city with coordinates matches the search.",
+            "hm_rank": "{c} · rank {r} of {n}",
+            "f_sum": "Sum:", "f_note": "The formula is the one in the original model; the weights can be changed in advanced search.",
+            "f_aria": "Bar with each factor's share of the score",
             "lower": "(lower is better)", "best": "best", "sim_h": "Similar cities", "sal_link": "Developer salaries in {c}",
             "no_geo": "This city has no coordinates in the data.", "see_map": "See on the map", "add_cmp": "Add to compare",
             "cmp_need": "Add at least two cities to see the comparison.", "metric": "Metric",
@@ -126,6 +138,10 @@ R = {
         },
     },
 }
+
+
+def fill_(s, **kw):
+    return s.format(**kw)
 
 
 def fmt(lang, v):
@@ -156,6 +172,10 @@ def reloc(c):
     t = R[lang]
     meta = DATA["meta"]
     n_c, n_geo = meta["n_cities"], meta["n_geo"]
+    fmtn = (lambda v: f"{v:,}".replace(",", ".")) if lang == "es" else (lambda v: f"{v:,}")
+    facts_line = (f"<b>{fmtn(n_c)}</b> ciudades · <b>{fmtn(meta['n_records'])}</b> respuestas de la encuesta de Stack Overflow · <b>{meta['n_countries']}</b> países"
+                  if lang == "es" else
+                  f"<b>{fmtn(n_c)}</b> cities · <b>{fmtn(meta['n_records'])}</b> Stack Overflow survey answers · <b>{meta['n_countries']}</b> countries")
     radios = f'<label><input type="radio" name="hr" value="-1" checked> {esc(t["all"])}</label>' + "".join(
         f'<label><input type="radio" name="hr" value="{i}"> {esc(n)}</label>' for i, n in enumerate(t["regions"][:3]))
     pops = " · ".join(f'<a href="#/b?q={esc(x)}">{esc(x)}</a>' for x in t["pop_l"])
@@ -191,9 +211,13 @@ def reloc(c):
 <p class="by">{esc(t['tag'])}</p></div>
 {form('p', t, True)}
 <p class="act"><button type="button" id="lucky" class="b alt">{esc(t['lucky'])}</button></p>
+<p class="facts">{facts_line}</p>
 <p class="rad" role="group" aria-label="{esc(t['region'])}">{radios}</p>
 <p class="lk">{nav}</p>
 <p class="pp">{esc(t['pop'])}: {pops}</p>
+<section id="dots" class="dots" aria-labelledby="hmh" hidden><h2 id="hmh" class="sr">{esc(t['js']['dots_h'])}</h2>
+<svg id="hm" viewBox="0 15 360 125" role="img" aria-label="{esc(fill_(t['js']['dots_aria'], n=n_geo))}"></svg>
+<p id="hmn" class="hmn" aria-live="polite">{esc(fill_(t['js']['dots_p'], n=n_geo, t=n_c))}</p></section>
 <p class="inl">{esc(t['in'])}: <a href="{c['other_h']}" hreflang="{c['other']}" lang="{c['other']}">{esc(t['lang'])}</a></p>
 <noscript><p>{esc(t['noscript'])}</p><ol>{ns}</ol></noscript></section>
 

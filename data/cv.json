@@ -1,0 +1,130 @@
+{
+ "name": "Damián Cambeiro",
+ "role": "Junior Python / Data Developer",
+ "contact": "dcambeiro15@gmail.com  |  linkedin.com/in/damian-cambeiro  |  github.com/Udamian",
+ "loc": "Galicia, Spain",
+ "sections": [
+  {
+   "id": "perfil",
+   "title": "PERFIL",
+   "blocks": [
+    {
+     "p": "Desarrollador junior con formación en Desarrollo de Aplicaciones Multiplataforma y especialización en Big Data e Inteligencia Artificial. Perfil orientado a Python, SQL, desarrollo backend y APIs REST, con capacidad para construir proyectos completos de principio a fin (ETL, API, base de datos y despliegue). Experiencia práctica en automatización de procesos e integración de sistemas."
+    }
+   ]
+  },
+  {
+   "id": "tecnicas",
+   "title": "COMPETENCIAS TÉCNICAS",
+   "blocks": [
+    {
+     "p": "**Programación:** Python, SQL, Java"
+    },
+    {
+     "p": "**Backend y APIs:** FastAPI, REST APIs, SQLAlchemy, Odoo"
+    },
+    {
+     "p": "**Bases de datos:** PostgreSQL, MySQL, SQLite"
+    },
+    {
+     "p": "**Datos:** Pandas, NumPy, ETL, Análisis de datos (Data Analysis), Parquet"
+    },
+    {
+     "p": "**Herramientas:** Git, Docker, pytest, Jupyter, Streamlit"
+    },
+    {
+     "p": "**IA y automatización:** n8n, RAG, LLMs, scikit-learn"
+    }
+   ]
+  },
+  {
+   "id": "exp",
+   "title": "EXPERIENCIA",
+   "blocks": [
+    {
+     "row": [
+      "**Desarrollador Junior en Prácticas** | Optitech Europa",
+      "Abril 2025 – Junio 2025"
+     ]
+    },
+    {
+     "ul": [
+      "Desarrollé y amplié módulos personalizados en **Python/Odoo** para procesos internos.",
+      "Trabajé con **APIs REST** e integraciones con servicios externos.",
+      "Diseñé workflows con **n8n** para automatizar procesos de varios pasos.",
+      "Participé en el desarrollo de una solución RAG con LLMs para consultar documentación interna."
+     ]
+    }
+   ]
+  },
+  {
+   "id": "proyectos",
+   "title": "PROYECTOS",
+   "blocks": [
+    {
+     "row": [
+      "**RelocationDevs** | Producto de datos end-to-end",
+      "github.com/Udamian/RelocationDevs"
+     ]
+    },
+    {
+     "p": "*Tecnologías: Python, Pandas, NumPy, SQL, scikit-learn, Plotly, Streamlit*"
+    },
+    {
+     "ul": [
+      "Integración y transformación de 4 fuentes públicas heterogéneas, incluyendo 18.112 registros de Stack Overflow Developer Survey.",
+      "Pipeline ETL con Python, pandas y NumPy, junto con análisis exploratorio e ingeniería de indicadores.",
+      "Visualizaciones interactivas con Streamlit y arquitectura modular.",
+      "Modelo de predicción salarial con GradientBoostingRegressor, con cobertura de 149 países."
+     ]
+    },
+    {
+     "sub": "Contribuciones a la comunidad"
+    },
+    {
+     "row": [
+      "**YTM Sync** | Aplicación para Spicetify · GitHub",
+      "github.com/Udamian/spicetify-ytm-sync"
+     ]
+    },
+    {
+     "ul": [
+      "Desarrollé una aplicación que sincroniza listas de reproducción y canciones favoritas de Spotify con YouTube Music, manteniendo el orden y actualizando los cambios.",
+      "Implementé un servicio local en Python con Flask y SQLite, integrado con una aplicación para Spicetify desarrollada en TypeScript.",
+      "Incorporé mecanismos de revisión manual para canciones no identificadas con certeza, además de sincronización incremental y gestión local de la sesión."
+     ]
+    }
+   ]
+  },
+  {
+   "id": "formacion",
+   "title": "FORMACIÓN",
+   "blocks": [
+    {
+     "row": [
+      "**Especialización en Big Data e Inteligencia Artificial** | Master Profesional",
+      "2025 – 2026"
+     ]
+    },
+    {
+     "p": "Nota media superior a 9."
+    },
+    {
+     "row": [
+      "**Técnico Superior en Desarrollo de Aplicaciones Multiplataforma (DAM)** | FP Superior",
+      "2023 – 2025"
+     ]
+    }
+   ]
+  },
+  {
+   "id": "idiomas",
+   "title": "IDIOMAS",
+   "blocks": [
+    {
+     "p": "**Español:** nativo     **Gallego:** nativo     **Inglés:** B2"
+    }
+   ]
+  }
+ ]
+}

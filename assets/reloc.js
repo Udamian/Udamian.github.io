@@ -18,6 +18,7 @@
   function norm(s) { return String(s).toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, ''); }
   var nf0 = new Intl.NumberFormat(LANG, { maximumFractionDigits: 0, useGrouping: 'always' });
   var nf1 = new Intl.NumberFormat(LANG, { maximumFractionDigits: 1, minimumFractionDigits: 1, useGrouping: 'always' });
+  var nf2 = new Intl.NumberFormat(LANG, { maximumFractionDigits: 2, minimumFractionDigits: 2, useGrouping: 'always' });
   function eur(v) { return LANG === 'es' ? nf0.format(v) + ' €' : '€' + nf0.format(v); }
   function fill(s, o) { return s.replace(/\{(\w+)\}/g, function (_, k) { return o[k] === undefined ? '' : o[k]; }); }
 
@@ -189,8 +190,18 @@
   function city(c) {
     show('city');
     document.title = c.label + ' - RelocationDevs';
-    var h = '<div class="bar"><b>' + esc(c.label) + '</b><span>' + esc(M.reg[c.reg]) + '</span></div>';
-    h += '<p class="sn big2">' + T.score + ' <b>' + nf1.format(c.sc) + '</b> · ' + fill(T.rank, { r: c.rank, n: C.length }) + '</p>';
+    var tinv = Math.max(0, 100 - c.tax);
+    var parts = [[T.m.ppi, c.ppi, W0.p], [T.m.job, c.job, W0.j], [T.m.qol, c.qol, W0.q], [T.w_t_lbl || M.w.t + ' (100 − ' + nf1.format(c.tax) + ')', tinv, W0.t]];
+    var tot = parts.reduce(function (a, r) { return a + r[1] * r[2]; }, 0) || 1;
+    var shades = ['#f5f5f7', '#c7c7cc', '#8e8e93', '#48484a'];
+    var h = '<div class="fh"><div class="ftop"><div><h2 class="fn">' + esc(c.label) + '</h2><p class="fs">' + esc(M.reg[c.reg]) + '</p></div>' +
+      '<div class="fsc"><p class="fnum">' + nf2.format(c.sc) + '</p><p class="fcap">' + esc(T.m.score) + '<br><b>' + esc(fill(T.rank, { r: c.rank, n: C.length })) + '</b></p></div></div>' +
+      '<div class="fbar" role="img" aria-label="' + esc(T.f_aria) + '">' + parts.map(function (r, k) {
+        return '<i style="flex:' + (r[1] * r[2] / tot * 100).toFixed(2) + ';background:' + shades[k] + '"></i>';
+      }).join('') + '</div><div class="fleg">' + parts.map(function (r, k) {
+        return '<div style="border-top-color:' + shades[k] + '"><b>' + esc(r[0]) + '</b><br>' + nf2.format(r[1]) + ' × ' + nf2.format(r[2]) + ' = ' + nf2.format(r[1] * r[2]) + '</div>';
+      }).join('') + '</div><p class="fsum">' + esc(T.f_sum) + ' ' + parts.map(function (r) { return nf2.format(r[1] * r[2]); }).join(' + ') +
+      ' = <b>' + nf2.format(c.sc) + '</b>. ' + esc(T.f_note) + '</p></div>';
     h += '<table class="tb"><tbody>';
     KEYS.forEach(function (k) {
       var v = c[k], txt = (k === 'tax') ? nf1.format(v) + ' %' : (k === 'qol' || k === 'job' || k === 'col') ? nf1.format(v) :
@@ -200,11 +211,6 @@
         '</td><td class="bc" aria-hidden="true"><i style="width:' + Math.max(2, v / MAX[k] * 100).toFixed(1) + '%"></i></td></tr>';
     });
     h += '</tbody></table>';
-    var tinv = Math.max(0, 100 - c.tax);
-    h += '<h2>' + T.how + '</h2><table class="tb sm2"><tbody>' +
-      [[T.m.ppi, c.ppi, W0.p], [T.m.job, c.job, W0.j], [T.m.qol, c.qol, W0.q], [T.w_t_lbl || M.w.t + ' (100 − ' + nf1.format(c.tax) + ')', tinv, W0.t]].map(function (r) {
-        return '<tr><th scope="row">' + esc(r[0]) + '</th><td>' + nf1.format(r[1]) + ' × ' + pc(r[2]) + '</td><td>' + nf1.format(r[1] * r[2]) + '</td></tr>';
-      }).join('') + '<tr class="tt"><th scope="row">' + T.total + '</th><td></td><td><b>' + nf1.format(c.sc) + '</b></td></tr></tbody></table>';
     h += '<p class="ln"><a href="' + cmpHref(c.i) + '">' + T.add_cmp + '</a>' +
       (c.lat === null ? ' · <span class="dim">' + T.no_geo + '</span>' : ' · <a href="#/map?c=' + c.i + '">' + T.see_map + '</a>') +
       (survey(c.country) ? ' · <a href="#/sal?c=' + encodeURIComponent(survey(c.country)) + '">' + esc(fill(T.sal_link, { c: c.country })) + '</a>' : '') + '</p>';
@@ -295,6 +301,34 @@
     for (var k = 0; k < radios.length; k++) radios[k].checked = +radios[k].value === mapReg;
     drawMap();
   }
+
+  /* ---- portada: mapa de puntos (las ciudades con coordenadas se encienden al escribir) ---- */
+  (function () {
+    var hm = $('#hm'), box = $('#dots');
+    if (!hm || !box) return;
+    var s = '';
+    GEO.forEach(function (c) { s += '<circle class="hd" data-i="' + c.i + '" cx="' + (c.lon + 180).toFixed(2) + '" cy="' + (90 - c.lat).toFixed(2) + '" r="1.5"/>'; });
+    var vigo = GEO.filter(function (c) { return c.name === 'Vigo'; })[0], mk = '';
+    if (vigo) {
+      var x = vigo.lon + 180, y = 90 - vigo.lat;
+      mk = '<g class="vg"><circle cx="' + x.toFixed(2) + '" cy="' + y.toFixed(2) + '" r="4.2"/><path d="M' + x.toFixed(2) + ' ' + (y - 4.2).toFixed(2) + 'V' + (y - 20).toFixed(2) + '"/>' +
+        '<text x="' + (x + 2.5).toFixed(2) + '" y="' + (y - 21.5).toFixed(2) + '">' + esc(fill(T.hm_rank, { c: vigo.name, r: vigo.rank, n: C.length })) + '</text></g>';
+    }
+    hm.innerHTML = s + mk;
+    box.hidden = false;
+    var dots = hm.querySelectorAll('.hd'), note = $('#hmn'), base = note.textContent;
+    function paint() {
+      var q = $('#pq').value.trim(), r = document.querySelector('input[name=hr]:checked'), rv = r ? +r.value : -1;
+      if (!q && rv < 0) { hm.classList.remove('q'); for (var i = 0; i < dots.length; i++) dots[i].classList.remove('on'); note.textContent = base; return; }
+      var lit = {}, n = 0;
+      search({ q: q, r: rv, o: 'score' }).list.forEach(function (c) { lit[c.i] = 1; });
+      for (var k = 0; k < dots.length; k++) { var on = !!lit[dots[k].getAttribute('data-i')]; dots[k].classList.toggle('on', on); if (on) n++; }
+      hm.classList.add('q');
+      note.textContent = n ? fill(T.dots_hit, { k: n }) : T.dots_none;
+    }
+    $('#pq').addEventListener('input', paint);
+    Array.prototype.forEach.call(document.querySelectorAll('input[name=hr]'), function (el) { el.addEventListener('change', paint); });
+  })();
 
   /* ---- salarios ---- */
   var SALMAX = 0;
