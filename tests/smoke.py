@@ -46,6 +46,11 @@ with sync_playwright() as p:
             pg.wait_for_function("document.querySelector('#ob .cpst').textContent.length>0")
             check(em and "@" in em and em in pg.locator("#ob .cpst").inner_text(), f"{tag} boton copiar correo avisa de la direccion copiada")
             check(pg.evaluate("navigator.clipboard.readText()") == em, f"{tag} el portapapeles contiene el correo")
+            pg.locator("#ob a[href^=mailto]").dispatch_event("click")
+            pg.wait_for_selector(".mailtoast:not([hidden])", timeout=5000)
+            check(em in pg.inner_text(".mailtoast") and pg.locator(".mailtoast a[href*='mail.google.com']").count() == 1, f"{tag} si mailto no abre nada, aviso con la direccion y Gmail")
+            check(pg.locator("link[rel=apple-touch-icon]").count() == 1, f"{tag} icono tactil")
+            check("Escribir a" not in pg.inner_text("body") and "Write to him" not in pg.inner_text("body"), f"{tag} textos en primera persona")
             pg.fill("#q", "docker"); pg.press("#q", "Enter")
             check(pg.locator("#ob:visible").count() == 0, f"{tag} ficha oculta al buscar otra cosa")
             pg.fill("#q", "docker"); 

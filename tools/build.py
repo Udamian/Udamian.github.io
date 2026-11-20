@@ -35,19 +35,19 @@ STR = {
         "pager_res": "Página de resultados:", "sz_px": "{w} x {h} píxeles - {k}k", "more_about": "Sobre mí »",
         "ad1_t": "{name}: desarrollador junior", "ad1_a": "Python, SQL y datos.", "ad1_b": "Máster en Big Data e IA y ciclo DAM.",
         "ad2_t": "CV de {name} (PDF)", "ad2_a": "Perfil, competencias y proyectos", "ad2_b": "en una sola página.",
-        "ad3_t": "Escribir a {first}", "ad3_a": "Busca su primer puesto en backend,", "ad3_b": "análisis o ingeniería de datos.",
+        "ad3_t": "Escríbeme", "ad3_a": "Busco mi primer puesto en backend,", "ad3_b": "análisis o ingeniería de datos.",
         "ad4_t": "{name} en LinkedIn", "ad4_a": "Experiencia, formación y contacto", "ad4_b": "profesional.",
         "copy_mail": "Copiar correo", "copied": "Correo copiado", "copy_fail": "No se pudo copiar. Selecciónalo:",
-        "ob_cv": "Descargar CV (PDF)", "ob_mail": "Escribir a {first}", "ob_more": "Más sobre {first} »",
+        "ob_cv": "Descargar CV (PDF)", "ob_mail": "Escríbeme", "ob_more": "Más sobre mí »",
         "didyou": "Quizás quisiste decir:", "didyou_link": "contratar a Damián",
-        "didyou_txt": "Escríbele por correo o por LinkedIn: busca su primer puesto en backend, análisis o ingeniería de datos.",
+        "didyou_txt": "Escríbeme por correo o por LinkedIn: busco mi primer puesto en backend, análisis o ingeniería de datos.",
         "p_label": "Perfil de Damián Cambeiro", "p_cache": "En caché · {date}", "p_more": "Ver el perfil completo y el CV en caché",
         "f_edu": "Formación", "f_exp": "Experiencia", "f_lang": "Idiomas", "f_tools": "Herramientas", "f_loc": "Ubicación",
         "next": "Siguiente", "nav_top": "Enlaces", "nav_foot": "Pie de página", "pager_label": "Cambeiro, página 1", "cv_img_alt": "Cabecera del CV de Damián Cambeiro: nombre, puesto, contacto y perfil.",
         "cap_img": "Captura de {t}", "stats_label": "Datos clave",
         "ab_back": "← Resultados", "ab_path": "Trayectoria", "ab_tools": "Herramientas", "ab_tools_p": "Búsquedas relacionadas con este perfil. Cada una abre los proyectos que la usan.",
-        "ab_lang": "Idiomas", "n_proj_one": "1 proyecto", "n_proj_many": "{n} proyectos", "ab_hire_p": "Escríbele por correo o por LinkedIn. El CV está a un clic, a la derecha.",
-        "ab_mail": "Escribir un correo", "ab_li": "Abrir LinkedIn",
+        "ab_lang": "Idiomas", "n_proj_one": "1 proyecto", "n_proj_many": "{n} proyectos", "ab_hire_p": "Escríbeme por correo o por LinkedIn. El CV está a un clic, a la derecha.",
+        "ab_mail": "Escríbeme un correo", "ab_li": "Abrir LinkedIn",
         "cache_banner": "Esta es la copia en caché de Cambeiro de <a href=\"{url}\">{file}</a>. Es una instantánea de la página tal y como se veía el {date}. La página actual puede haber cambiado desde entonces.<br>Se han resaltado estos términos de búsqueda:",
         "terms_label": "Resaltar en el CV:", "term_ph": "escribe otro término", "term_rm": "quitar", "term_add": "Resaltar",
         "open_pdf": "Abrir el PDF", "dl_pdf": "Descargar · {size}", "dl_cv": "Descargar CV · PDF · {size}", "folio_label": "Copia del CV de Damián Cambeiro (en español)", "see_cv": "Ver el CV completo",
@@ -88,19 +88,19 @@ STR = {
         "pager_res": "Result Page:", "sz_px": "{w} x {h} pixels - {k}k", "more_about": "About me »",
         "ad1_t": "{name}: junior developer", "ad1_a": "Python, SQL and data.", "ad1_b": "Big Data and AI master's, DAM diploma.",
         "ad2_t": "{name}'s CV (PDF)", "ad2_a": "Profile, skills and projects", "ad2_b": "on a single page.",
-        "ad3_t": "Write to {first}", "ad3_a": "Looking for a first role in backend,", "ad3_b": "data analysis or data engineering.",
+        "ad3_t": "Write to me", "ad3_a": "Looking for my first role in backend,", "ad3_b": "data analysis or data engineering.",
         "ad4_t": "{name} on LinkedIn", "ad4_a": "Experience, education and", "ad4_b": "professional contact.",
         "copy_mail": "Copy email", "copied": "Email copied", "copy_fail": "Could not copy. Select it:",
-        "ob_cv": "Download CV (PDF)", "ob_mail": "Email {first}", "ob_more": "More about {first} »",
+        "ob_cv": "Download CV (PDF)", "ob_mail": "Email me", "ob_more": "More about me »",
         "didyou": "Did you mean:", "didyou_link": "hire Damián",
-        "didyou_txt": "Write to him by email or LinkedIn: he is looking for his first role in backend, data analysis or data engineering.",
+        "didyou_txt": "Write to me by email or LinkedIn: I'm looking for my first role in backend, data analysis or data engineering.",
         "p_label": "Damián Cambeiro's profile", "p_cache": "Cached · {date}", "p_more": "See the full profile and the cached CV",
         "f_edu": "Education", "f_exp": "Experience", "f_lang": "Languages", "f_tools": "Tools", "f_loc": "Location",
         "next": "Next", "nav_top": "Links", "nav_foot": "Footer", "pager_label": "Cambeiro, page 1", "cv_img_alt": "Top of Damián Cambeiro's CV: name, title, contact details and profile.",
         "cap_img": "Screenshot of {t}", "stats_label": "Key figures",
         "ab_back": "← Results", "ab_path": "Background", "ab_tools": "Tools", "ab_tools_p": "Searches related to this profile. Each one opens the projects that use it.",
-        "ab_lang": "Languages", "n_proj_one": "1 project", "n_proj_many": "{n} projects", "ab_hire_p": "Write to him by email or LinkedIn. The CV is one click away, on the right.",
-        "ab_mail": "Write an email", "ab_li": "Open LinkedIn",
+        "ab_lang": "Languages", "n_proj_one": "1 project", "n_proj_many": "{n} projects", "ab_hire_p": "Write to me by email or LinkedIn. The CV is one click away, on the right.",
+        "ab_mail": "Email me", "ab_li": "Open LinkedIn",
         "cache_banner": "This is Cambeiro's cache of <a href=\"{url}\">{file}</a>. It is a snapshot of the page as it appeared on {date}. The current page could have changed in the meantime.<br>These search terms have been highlighted:",
         "terms_label": "Highlight in the CV:", "term_ph": "type another term", "term_rm": "remove", "term_add": "Highlight",
         "open_pdf": "Open the PDF", "dl_pdf": "Download · {size}", "dl_cv": "Download CV · PDF · {size}", "folio_label": "Copy of Damián Cambeiro's CV (in Spanish)", "see_cv": "See the full CV",
@@ -137,10 +137,7 @@ STR = {
 }
 
 LOGO_COLORS = ["#0033cc", "#cc0000", "#ffcc00", "#0033cc", "#009900", "#cc0000", "#0033cc", "#ffcc00"]
-FAVICON = ("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E"
-           "%3Crect width='32' height='32' rx='7' fill='%234d90fe'/%3E"
-           "%3Ctext x='16' y='23' font-family='Georgia,serif' font-size='21' font-weight='700' "
-           "text-anchor='middle' fill='white'%3EC%3C/text%3E%3C/svg%3E")
+FAVICON = ("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='0' y2='1'%3E%3Cstop offset='0' stop-color='%23fff'/%3E%3Cstop offset='1' stop-color='%23dfe6f5'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect x='.8' y='1.2' width='30.4' height='30' rx='7' fill='%23000' fill-opacity='.22'/%3E%3Crect x='.5' y='.5' width='30.4' height='30' rx='7' fill='url(%23g)' stroke='%23aab4cc' stroke-width='.8'/%3E%3Cpath d=%22M23.49 22.83A8.6 8.6 0 1 1 23.49 11.77%22 fill=%22none%22 stroke=%22%23000%22 stroke-width=%226.4%22 stroke-opacity=%220.28%22/%3E%3Cpath d=%22M22.59 21.53A8.6 8.6 0 0 1 13.06 24.08%22 fill=%22none%22 stroke=%22%2334a853%22 stroke-width=%226.4%22/%3E%3Cpath d=%22M13.06 24.08A8.6 8.6 0 0 1 7.40 16.00%22 fill=%22none%22 stroke=%22%23fbbc05%22 stroke-width=%226.4%22/%3E%3Cpath d=%22M7.40 16.00A8.6 8.6 0 0 1 14.51 7.53%22 fill=%22none%22 stroke=%22%23ea4335%22 stroke-width=%226.4%22/%3E%3Cpath d=%22M14.51 7.53A8.6 8.6 0 0 1 22.59 10.47%22 fill=%22none%22 stroke=%22%234285f4%22 stroke-width=%226.4%22/%3E%3C/svg%3E")
 
 
 # ---------------------------------------------------------------- utilidades
@@ -173,7 +170,7 @@ def preview_targets(text):
         if "rel=" not in tag:
             tag = tag[:-1] + ' rel="noopener">'
         return tag[:-1] + ' target="_blank">'
-    return re.sub(r'<a\b[^>]*href="(?:https?://|mailto:)[^"]*"[^>]*>', fix, text)
+    return re.sub(r'<a\b[^>]*href="https?://[^"]*"[^>]*>', fix, text)
 
 
 def write(rel, text):
@@ -296,7 +293,7 @@ def head(lang, rel, title, desc, alts, css, extra=""):
         f'<meta name="description" content="{esc(desc)}">'
         f'<meta property="og:title" content="{esc(title)}"><meta property="og:description" content="{esc(desc)}">'
         '<meta property="og:type" content="website">'
-        f'{social}<link rel="icon" href="{FAVICON}">{links}'
+        f'{social}<link rel="icon" href="{FAVICON}"><link rel="apple-touch-icon" href="{asset(lang, rel, "assets/icon-180.png")}">{links}'
         f"{extra}{csslinks}</head>"
     )
 
@@ -709,7 +706,7 @@ def not_found(prof):
     s = STR["es"]
     return f"""<!doctype html><html lang="es"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1"><meta name="referrer" content="strict-origin-when-cross-origin"><meta name="robots" content="noindex"><title>404 - Cambeiro</title>
-<link rel="icon" href="{FAVICON}"><link rel="stylesheet" href="{bp}/assets/buscador.css"></head>
+<link rel="icon" href="{FAVICON}"><link rel="apple-touch-icon" href="{bp}/assets/icon-180.png"><link rel="stylesheet" href="{bp}/assets/buscador.css"></head>
 <body><div class="sr">
 <nav class="gt" aria-label="{esc(s['nav_top'])}"><span></span><span class="gr"><a href="{bp}/" hreflang="es" lang="es">Español</a><a href="{bp}/en/" hreflang="en" lang="en">English</a></span></nav>
 <header class="top"><a class="logo" href="{bp}/" aria-label="Cambeiro">{logo()}</a>

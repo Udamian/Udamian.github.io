@@ -12,7 +12,8 @@ OUTS = {"es": ("cv.json", "assets/cv/Damian_Cambeiro_CV.pdf", "Damián Cambeiro 
         "en": ("cv.en.json", "assets/cv/Damian_Cambeiro_CV_EN.pdf", "Damián Cambeiro - Junior Python / Data Developer CV")}
 LINKS = {"dcambeiro15@gmail.com": "mailto:dcambeiro15@gmail.com",
          "linkedin.com/in/damian-cambeiro": "https://www.linkedin.com/in/damian-cambeiro/",
-         "github.com/Udamian": "https://github.com/Udamian"}
+         "github.com/Udamian": "https://github.com/Udamian",
+         "udamian.github.io": "https://udamian.github.io/"}
 
 CSS = """
 @font-face{font-family:C;font-weight:400;src:url(file://%(f)s/carlito-latin-400-normal.woff2)}

@@ -126,3 +126,7 @@ html:not(.js) .igrid,html:not(.js) #p-codigo{display:block}
 @media (prefers-reduced-motion:reduce){*{scroll-behavior:auto!important;transition:none!important;animation:none!important}}
 /* copiar correo */
 button.obtn{cursor:pointer}.cpst{font-size:.92em;color:#0a5c0a}.cpst:empty{display:none}
+/* aviso cuando mailto: no abre ningun programa */
+.mailtoast{position:fixed;left:50%;width:max-content;bottom:16px;transform:translateX(-50%);z-index:20;max-width:min(560px,calc(100vw - 24px));background:#202124;color:#fff;padding:10px 14px;font:14px/1.45 Arial,Helvetica,sans-serif;border-radius:3px;box-shadow:0 6px 24px #0009}
+.mailtoast[hidden]{display:none}.mailtoast a{color:#9ecbff;margin-left:6px}.mailtoast b{color:#fff;overflow-wrap:anywhere}
+.mailtoast button{margin-left:10px;font:inherit;color:#fff;background:transparent;border:1px solid #8a8d91;padding:2px 10px;cursor:pointer}
