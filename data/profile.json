@@ -45,7 +45,8 @@
     "github": "https://github.com/Udamian",
     "linkedin": "https://www.linkedin.com/in/damian-cambeiro/",
     "email": "dcambeiro15@gmail.com",
-    "cv": "assets/cv/Damian_Cambeiro_CV.pdf"
+    "cv": "assets/cv/Damian_Cambeiro_CV.pdf",
+    "cv_en": "assets/cv/Damian_Cambeiro_CV_EN.pdf"
   },
   "first_name": "Damián",
   "role_short": {
@@ -60,7 +61,7 @@
     "es": "Estudié DAM y un máster en Big Data e IA. Busco mi primer puesto en backend, análisis o ingeniería de datos.",
     "en": "I studied DAM (multiplatform app development) and a Big Data and AI master's. I'm looking for my first role in backend, data analysis or data engineering."
   },
-  "cv_date": "2026-10-25",
+  "cv_date": "2026-11-17",
   "path": {
     "es": [
       {
@@ -108,5 +109,8 @@
       "es": "Prácticas en Optitech Europa, abril–junio 2025",
       "en": "Internship at Optitech Europa, April–June 2025"
     }
+  },
+  "analytics": {
+    "goatcounter": "udamian"
   }
 }

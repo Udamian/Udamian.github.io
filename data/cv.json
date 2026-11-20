@@ -2,7 +2,7 @@
  "name": "Damián Cambeiro",
  "role": "Junior Python / Data Developer",
  "contact": "dcambeiro15@gmail.com  |  linkedin.com/in/damian-cambeiro  |  github.com/Udamian",
- "loc": "Galicia, Spain",
+ "loc": "Galicia, España",
  "sections": [
   {
    "id": "perfil",
@@ -18,7 +18,7 @@
    "title": "COMPETENCIAS TÉCNICAS",
    "blocks": [
     {
-     "p": "**Programación:** Python, SQL, Java"
+     "p": "**Programación:** Python, SQL, Java, TypeScript"
     },
     {
      "p": "**Backend y APIs:** FastAPI, REST APIs, SQLAlchemy, Odoo"
@@ -79,6 +79,22 @@
      ]
     },
     {
+     "row": [
+      "**Job Tracker** | API y panel de seguimiento de candidaturas",
+      "github.com/Udamian/job-tracker"
+     ]
+    },
+    {
+     "p": "*Tecnologías: Python, FastAPI, PostgreSQL, SQLAlchemy, Pydantic, Pandas, Docker, pytest*"
+    },
+    {
+     "ul": [
+      "API REST con FastAPI y PostgreSQL para crear, filtrar y editar candidaturas, con estadísticas de respuesta y embudo de selección.",
+      "Regla de negocio automática: el estado «Sin respuesta» lo asigna el sistema tras 21 días sin novedades.",
+      "Panel en HTML y JavaScript con Chart.js; despliegue con Docker Compose y pruebas con pytest."
+     ]
+    },
+    {
      "sub": "Contribuciones a la comunidad"
     },
     {
@@ -102,7 +118,7 @@
    "blocks": [
     {
      "row": [
-      "**Especialización en Big Data e Inteligencia Artificial** | Master Profesional",
+      "**Especialización en Big Data e Inteligencia Artificial** | Máster Profesional",
       "2025 – 2026"
      ]
     },

@@ -1,0 +1,146 @@
+{
+ "name": "Damián Cambeiro",
+ "role": "Junior Python / Data Developer",
+ "contact": "dcambeiro15@gmail.com  |  linkedin.com/in/damian-cambeiro  |  github.com/Udamian",
+ "loc": "Galicia, Spain",
+ "sections": [
+  {
+   "id": "perfil",
+   "title": "PROFILE",
+   "blocks": [
+    {
+     "p": "Junior developer trained in Multiplatform Application Development, with a specialization in Big Data and Artificial Intelligence. Focused on Python, SQL, backend development and REST APIs, able to build complete projects end to end (ETL, API, database and deployment). Hands-on experience in process automation and systems integration."
+    }
+   ]
+  },
+  {
+   "id": "tecnicas",
+   "title": "TECHNICAL SKILLS",
+   "blocks": [
+    {
+     "p": "**Programming:** Python, SQL, Java, TypeScript"
+    },
+    {
+     "p": "**Backend and APIs:** FastAPI, REST APIs, SQLAlchemy, Odoo"
+    },
+    {
+     "p": "**Databases:** PostgreSQL, MySQL, SQLite"
+    },
+    {
+     "p": "**Data:** Pandas, NumPy, ETL, Data Analysis, Parquet"
+    },
+    {
+     "p": "**Tools:** Git, Docker, pytest, Jupyter, Streamlit"
+    },
+    {
+     "p": "**AI and automation:** n8n, RAG, LLMs, scikit-learn"
+    }
+   ]
+  },
+  {
+   "id": "exp",
+   "title": "EXPERIENCE",
+   "blocks": [
+    {
+     "row": [
+      "**Junior Developer (Internship)** | Optitech Europa",
+      "April 2025 – June 2025"
+     ]
+    },
+    {
+     "ul": [
+      "Built and extended custom **Python/Odoo** modules for internal processes.",
+      "Worked with **REST APIs** and integrations with external services.",
+      "Designed **n8n** workflows to automate multi-step processes.",
+      "Took part in building a RAG solution with LLMs to query internal documentation."
+     ]
+    }
+   ]
+  },
+  {
+   "id": "proyectos",
+   "title": "PROJECTS",
+   "blocks": [
+    {
+     "row": [
+      "**RelocationDevs** | End-to-end data product",
+      "github.com/Udamian/RelocationDevs"
+     ]
+    },
+    {
+     "p": "*Technologies: Python, Pandas, NumPy, SQL, scikit-learn, Plotly, Streamlit*"
+    },
+    {
+     "ul": [
+      "Integrated and transformed 4 heterogeneous public sources, including 18,112 records from the Stack Overflow Developer Survey.",
+      "ETL pipeline with Python, pandas and NumPy, plus exploratory analysis and indicator engineering.",
+      "Interactive visualizations with Streamlit and a modular architecture.",
+      "Salary prediction model with GradientBoostingRegressor, covering 149 countries."
+     ]
+    },
+    {
+     "row": [
+      "**Job Tracker** | Job-application tracking API and dashboard",
+      "github.com/Udamian/job-tracker"
+     ]
+    },
+    {
+     "p": "*Technologies: Python, FastAPI, PostgreSQL, SQLAlchemy, Pydantic, Pandas, Docker, pytest*"
+    },
+    {
+     "ul": [
+      "REST API with FastAPI and PostgreSQL to create, filter and edit applications, with response statistics and a hiring funnel.",
+      "Automatic business rule: the “No response” status is assigned by the system after 21 days without news.",
+      "Dashboard in HTML and JavaScript with Chart.js; deployed with Docker Compose and tested with pytest."
+     ]
+    },
+    {
+     "sub": "Community contributions"
+    },
+    {
+     "row": [
+      "**YTM Sync** | Spicetify app · GitHub",
+      "github.com/Udamian/spicetify-ytm-sync"
+     ]
+    },
+    {
+     "ul": [
+      "Built an app that syncs Spotify playlists and liked songs to YouTube Music, keeping the order and applying changes.",
+      "Implemented a local Python service with Flask and SQLite, integrated with a Spicetify app written in TypeScript.",
+      "Added manual review for songs that could not be matched with certainty, plus incremental sync and local session handling."
+     ]
+    }
+   ]
+  },
+  {
+   "id": "formacion",
+   "title": "EDUCATION",
+   "blocks": [
+    {
+     "row": [
+      "**Specialization in Big Data and Artificial Intelligence** | Professional Master's",
+      "2025 – 2026"
+     ]
+    },
+    {
+     "p": "Average grade above 9."
+    },
+    {
+     "row": [
+      "**Higher Technician in Multiplatform Application Development (DAM)** | Higher Vocational Training",
+      "2023 – 2025"
+     ]
+    }
+   ]
+  },
+  {
+   "id": "idiomas",
+   "title": "LANGUAGES",
+   "blocks": [
+    {
+     "p": "**Spanish:** native     **Galician:** native     **English:** B2"
+    }
+   ]
+  }
+ ]
+}

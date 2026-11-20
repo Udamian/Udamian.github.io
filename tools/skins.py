@@ -28,11 +28,12 @@ def player(c):
     bars = "".join(f'<i style="--d:{(i * 37) % 11}"></i>' for i in range(18))
     play = c["repo"]
     sh = c.get("shot")
-    shot = (f'<section class="box"><h2>{esc(t["shot"])}</h2><figure class="shot"><a href="{esc(sh["src"])}" title="{esc(t["shot_open"])}">'
+    shot = (f'<section class="box rt"><h2>{esc(t["shot"])}</h2><figure class="shot"><a href="{esc(sh["src"])}" title="{esc(t["shot_open"])}">'
             f'<img src="{esc(sh["src"])}" alt="{esc(sh["alt"])}" width="{sh["w"]}" height="{sh["h"]}" loading="lazy"></a>'
             f'<figcaption>{esc(sh["cap"])}</figcaption></figure></section>' if sh else "")
     return f"""<body class="skin-player"><main class="pl"><h1 class="vh">{esc(c['title'])} · {esc(c['kind'])}</h1>
-<div class="pt"><span>PORTFOLIO PLAYER</span><a href="{c['home']}" aria-label="{esc(s['w_close'])}" title="{esc(s['w_close'])}">✕</a></div>
+<div class="pt"><span>YTM SYNC · PLAYER</span><a href="{c['home']}" aria-label="{esc(s['w_close'])}" title="{esc(s['w_close'])}">✕</a></div>
+<div class="lf">
 <div class="dp"><div class="lcd"><div class="mq"><span>{esc(c['title'])} · {esc(c['kind'])}</span></div>
 <div class="kb">{esc(' · '.join(c['stack'][:4]))}</div></div><div class="eq" aria-hidden="true">{bars}</div></div>
 <div class="ct">
@@ -41,7 +42,6 @@ def player(c):
 <a class="pb" href="{esc(c['repo'])}" rel="noopener"><b>⏏</b><span>{esc(t['eject'])}</span></a>
 <a class="pb" href="{c['other_h']}" hreflang="{c['other']}" lang="{c['other']}"><b>⏭</b><span>{c['other'].upper()}</span></a></div>
 <p class="sm">{esc(c['summary'])}</p>
-{shot}
 <section class="box"><h2>{esc(t['tracks'])} · {esc(s['what'])}</h2><ol>{lis(c['feats'])}</ol></section>
 <section class="box"><h2>{esc(t['tags'])}</h2><dl>
 <dt>{esc(t['t_title'])}</dt><dd>{esc(c['title'])}</dd>
@@ -51,9 +51,12 @@ def player(c):
 <dt>{esc(t['t_tech'])}</dt><dd>{esc(', '.join(c['stack']))}</dd>
 <dt>{esc(t['t_info'])}</dt><dd><ul>{lis(c['facts'])}</ul></dd>
 <dt>{esc(t['t_comment'])}</dt><dd>{esc(c['note'])}</dd></dl></section>
+</div>
+{shot}
 </main></body></html>"""
 
 
 from reloc_skin import reloc  # noqa: E402
+from tracker_skin import tracker  # noqa: E402
 
-SKINS = {"player": player, "reloc": reloc}
+SKINS = {"player": player, "reloc": reloc, "tracker": tracker}

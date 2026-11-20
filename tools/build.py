@@ -25,6 +25,7 @@ LANGS = ("es", "en")
 OUT = ROOT      # carpeta de salida
 SUFFIX = ""     # "index.html" en la vista previa (hosts sin indice de carpeta)
 SITE = "https://udamian.github.io"  # origen + base_path; build() lo fija desde data/profile.json
+ANALYTICS = ""  # codigo de GoatCounter (data/profile.json -> analytics.goatcounter); vacio = sin analitica
 
 STR = {
     "es": {
@@ -36,6 +37,8 @@ STR = {
         "ad2_t": "CV de {name} (PDF)", "ad2_a": "Perfil, competencias y proyectos", "ad2_b": "en una sola página.",
         "ad3_t": "Escribir a {first}", "ad3_a": "Busca su primer puesto en backend,", "ad3_b": "análisis o ingeniería de datos.",
         "ad4_t": "{name} en LinkedIn", "ad4_a": "Experiencia, formación y contacto", "ad4_b": "profesional.",
+        "copy_mail": "Copiar correo", "copied": "Correo copiado", "copy_fail": "No se pudo copiar. Selecciónalo:",
+        "ob_cv": "Descargar CV (PDF)", "ob_mail": "Escribir a {first}", "ob_more": "Más sobre {first} »",
         "didyou": "Quizás quisiste decir:", "didyou_link": "contratar a Damián",
         "didyou_txt": "Escríbele por correo o por LinkedIn: busca su primer puesto en backend, análisis o ingeniería de datos.",
         "p_label": "Perfil de Damián Cambeiro", "p_cache": "En caché · {date}", "p_more": "Ver el perfil completo y el CV en caché",
@@ -67,6 +70,7 @@ STR = {
         "link_github": "GitHub", "link_linkedin": "LinkedIn", "link_email": "Correo", "link_cv": "CV (PDF)",
         "code_hint": "Repositorios públicos",
         "footer_note": "Este buscador es ficticio y forma parte del portfolio de Damián Cambeiro. No está afiliado a ningún buscador real.",
+        "privacy": "Estadísticas de visitas anónimas con GoatCounter: sin cookies ni datos personales.",
         "back": "← Volver a los resultados",
         "what": "Qué hace", "facts": "Datos clave", "stack": "Tecnologías", "notes": "Notas y límites",
         "btn_repo": "Ver código en GitHub",
@@ -86,6 +90,8 @@ STR = {
         "ad2_t": "{name}'s CV (PDF)", "ad2_a": "Profile, skills and projects", "ad2_b": "on a single page.",
         "ad3_t": "Write to {first}", "ad3_a": "Looking for a first role in backend,", "ad3_b": "data analysis or data engineering.",
         "ad4_t": "{name} on LinkedIn", "ad4_a": "Experience, education and", "ad4_b": "professional contact.",
+        "copy_mail": "Copy email", "copied": "Email copied", "copy_fail": "Could not copy. Select it:",
+        "ob_cv": "Download CV (PDF)", "ob_mail": "Email {first}", "ob_more": "More about {first} »",
         "didyou": "Did you mean:", "didyou_link": "hire Damián",
         "didyou_txt": "Write to him by email or LinkedIn: he is looking for his first role in backend, data analysis or data engineering.",
         "p_label": "Damián Cambeiro's profile", "p_cache": "Cached · {date}", "p_more": "See the full profile and the cached CV",
@@ -117,6 +123,7 @@ STR = {
         "link_github": "GitHub", "link_linkedin": "LinkedIn", "link_email": "Email", "link_cv": "CV (PDF, in Spanish)",
         "code_hint": "Public repositories",
         "footer_note": "This search engine is fictional and part of Damián Cambeiro's portfolio. It is not affiliated with any real search engine.",
+        "privacy": "Anonymous visit statistics with GoatCounter: no cookies, no personal data.",
         "back": "← Back to results",
         "what": "What it does", "facts": "Key facts", "stack": "Tech stack", "notes": "Notes and limits",
         "btn_repo": "View code on GitHub",
@@ -147,7 +154,32 @@ def norm(s):
     return "".join(c for c in s if unicodedata.category(c) != "Mn")
 
 
+def with_analytics(rel, text):
+    """Inyecta GoatCounter (sin cookies) y el script de eventos en cada HTML. Nada si no hay codigo o es la vista previa."""
+    if not ANALYTICS or SUFFIX or not rel.endswith(".html") or "</head>" not in text:
+        return text
+    ev = posixpath.relpath("assets/eventos.js", posixpath.dirname(rel) or ".")
+    gc = (f'<script data-goatcounter="https://{ANALYTICS}.goatcounter.com/count" async src="https://gc.zgo.at/count.js"></script>'
+          f'<script src="{ev}" defer></script>')
+    return text.replace("</head>", gc + "</head>", 1)
+
+
+def preview_targets(text):
+    """Solo vista previa: el marco del Artifact no navega dentro de si mismo, asi que los enlaces externos y mailto se abren aparte."""
+    def fix(m):
+        tag = m.group(0)
+        if "target=" in tag:
+            return tag
+        if "rel=" not in tag:
+            tag = tag[:-1] + ' rel="noopener">'
+        return tag[:-1] + ' target="_blank">'
+    return re.sub(r'<a\b[^>]*href="(?:https?://|mailto:)[^"]*"[^>]*>', fix, text)
+
+
 def write(rel, text):
+    if SUFFIX and rel.endswith(".html"):
+        text = preview_targets(text)
+    text = with_analytics(rel, text)
     path = os.path.join(OUT, rel)
     os.makedirs(os.path.dirname(path), exist_ok=True)
     with open(path, "w", encoding="utf-8") as f:
@@ -259,7 +291,7 @@ def head(lang, rel, title, desc, alts, css, extra=""):
     csslinks = "".join('<link rel="stylesheet" href="%s">' % c for c in css)
     return (
         f'<!doctype html><html lang="{lang}"><head><meta charset="utf-8">'
-        '<meta name="viewport" content="width=device-width,initial-scale=1">'
+        '<meta name="viewport" content="width=device-width,initial-scale=1"><meta name="referrer" content="strict-origin-when-cross-origin">'
         f"<title>{esc(title)}</title>"
         f'<meta name="description" content="{esc(desc)}">'
         f'<meta property="og:title" content="{esc(title)}"><meta property="og:description" content="{esc(desc)}">'
@@ -281,9 +313,9 @@ def header(lang, rel, prof, qvalue, switch_href):
     other = "en" if lang == "es" else "es"
     return f"""<nav class="gt" aria-label="{esc(s['nav_top'])}">
 <div role="tablist" aria-label="{esc(s['tabs_label'])}">
-<a role="tab" href="#todo" data-tab="todo" aria-selected="true">{s['tab_all']}</a>
-<a role="tab" href="#imagenes" data-tab="imagenes" aria-selected="false">{s['tab_img']}</a>
-<a role="tab" href="#codigo" data-tab="codigo" aria-selected="false">{s['tab_code']}</a></div>
+<a role="tab" id="tab-todo" aria-controls="p-todo" href="#todo" data-tab="todo" aria-selected="true">{s['tab_all']}</a>
+<a role="tab" id="tab-imagenes" aria-controls="p-imagenes" href="#imagenes" data-tab="imagenes" aria-selected="false">{s['tab_img']}</a>
+<a role="tab" id="tab-codigo" aria-controls="p-codigo" href="#codigo" data-tab="codigo" aria-selected="false">{s['tab_code']}</a></div>
 <a class="more" href="{href(lang, rel, lang, 'about')}">{esc(s['more_about'])}</a>
 <span class="gr"><a href="{switch_href}" hreflang="{other}" lang="{other}">{esc(s['other_name'])}</a><a href="{esc(gh)}" rel="noopener">GitHub</a></span>
 </nav>
@@ -307,12 +339,22 @@ def contact_links(lang, rel, prof, email_text=False):
     if L.get("email"):
         ln.append(f'<a href="mailto:{esc(L["email"])}">{esc(L["email"]) if email_text else s["link_email"]}</a>')
     if L.get("cv"):
-        ln.append(f'<a href="{asset(lang, rel, L["cv"])}">{s["link_cv"]}</a>')
+        ln.append(f'<a href="{asset(lang, rel, cvf(L, lang))}">{s["link_cv"]}</a>')
     return ln
 
 
+PREVIEW = (480, 360)
+
+
+def preview_path(lang, slug):
+    """Miniatura = captura de la propia pagina interior (tools/make_previews.py)."""
+    return f"assets/previews/{slug}-{lang}.webp"
+
+
 def cover_of(lang, rel, p):
-    """Miniatura real si el proyecto tiene captura; si no, la portada abstracta provisional."""
+    """Captura de la pagina interior si existe; si no, la de la app real o la portada abstracta."""
+    if os.path.exists(os.path.join(ROOT, preview_path(lang, p["slug"]))):
+        return asset(lang, rel, preview_path(lang, p["slug"]))
     if p.get("shot"):
         return asset(lang, rel, p["shot"]["thumb"])
     return asset(lang, rel, f"assets/covers/{p['slug']}.svg")
@@ -334,7 +376,7 @@ def result(lang, rel, p, prof, sizes):
     hay = norm(" ".join([p["title"], p["kind"][lang], p["summary"][lang], " ".join(p["stack"]), " ".join(p["features"][lang])]))
     disp = f"{prof['site_host']}/{page_dir(lang, 'p/' + p['slug'])}/"
     sim = fill(s["related_q"], x=p["stack"][0])
-    snippet = f"{esc(p['summary'][lang])} ... {esc(', '.join(p['stack'][:5]))}"
+    snippet = f"{esc(p['summary'][lang])} ... {esc(', '.join(p['stack'][:8]))}"
     sls = ""
     if p.get("featured"):
         cells = ""
@@ -344,7 +386,7 @@ def result(lang, rel, p, prof, sizes):
             cells += f'<div><a href="{target}"{ext}>{esc(lab)}</a><br><span>{esc(desc)}</span></div>'
         sls = f'<div class="sls">{cells}</div>'
     return f"""<article class="res" data-hay="{esc(hay)}">
-<a class="th" href="{page}" tabindex="-1" aria-hidden="true"><img src="{cover_of(lang, rel, p)}" alt="" width="400" height="300" loading="lazy"></a>
+<a class="th" href="{page}" tabindex="-1" aria-hidden="true"><img src="{cover_of(lang, rel, p)}" alt="" width="{PREVIEW[0]}" height="{PREVIEW[1]}" loading="lazy"></a>
 <h2><a href="{page}" data-b>{esc(p['title'])} - {esc(p['kind'][lang])}</a></h2>
 <p class="sn" data-b>{snippet}</p>
 {sls}<p class="ul"><span class="a">{esc(disp)} - {sizes[(lang, p['slug'])]}k - </span><a class="fl" href="{esc(p['links']['repo'])}" rel="noopener">{esc(s['repo'])}</a> - <a class="fl" href="?q={quote(sim)}" data-q="{esc(sim)}">{esc(s['similar'])}</a></p>
@@ -358,10 +400,12 @@ def figure(lang, rel, p, prof):
     hay = norm(" ".join([p["title"], p["kind"][lang], p["summary"][lang], " ".join(p["stack"])]))
     sh = p.get("shot")
     thumb = sh["thumb"] if sh else f"assets/covers/{p['slug']}.svg"
-    path = os.path.join(ROOT, thumb)
     w, h = (400, 300) if not sh else (sh["w"], sh["h"])
+    if os.path.exists(os.path.join(ROOT, preview_path(lang, p["slug"]))):
+        thumb, (w, h) = preview_path(lang, p["slug"]), PREVIEW
+    path = os.path.join(ROOT, thumb)
     dims = fill(s["sz_px"], w=w, h=h, k=kbytes(os.path.getsize(path)) if os.path.exists(path) else 1)
-    return (f'<figure class="fig" data-hay="{esc(hay)}"><a href="{page}"><img src="{cover_of(lang, rel, p)}" alt="{esc(fill(s["cover_alt"], t=p["title"]))}" width="400" height="300" loading="lazy"></a>'
+    return (f'<figure class="fig" data-hay="{esc(hay)}"><a href="{page}"><img src="{cover_of(lang, rel, p)}" alt="{esc(fill(s["cover_alt"], t=p["title"]))}" width="{PREVIEW[0]}" height="{PREVIEW[1]}" loading="lazy"></a>'
             f'<figcaption><a href="{page}" data-b>{esc(p["title"])}</a><span class="d">{esc(dims)}</span>'
             f'<span class="a">{esc(prof["site_host"])}</span></figcaption></figure>')
 
@@ -381,7 +425,7 @@ def ads(lang, rel, prof):
     kw = dict(name=prof["name"], first=prof["first_name"])
     items = [
         (href(lang, rel, lang, "about"), "ad1", f"{host}/{page_dir(lang, 'about')}/", ""),
-        (asset(lang, rel, L["cv"]), "ad2", f"{host}/{L['cv']} - {file_kb(L['cv']).replace(' KB', 'k')}", ""),
+        (asset(lang, rel, cvf(L, lang)), "ad2", f"{host}/{cvf(L, lang)} - {file_kb(cvf(L, lang)).replace(' KB', 'k')}", ""),
         (f"mailto:{L['email']}", "ad3", L["email"], ""),
         (L["linkedin"], "ad4", L["linkedin"].replace("https://www.", ""), ' rel="noopener"'),
     ]
@@ -392,6 +436,36 @@ def ads(lang, rel, prof):
     return f'<aside class="ads" aria-label="{esc(s["ads_h"])}"><p class="adh">{esc(s["ads_h"])}</p>{out}</aside>'
 
 
+def copybtn(lang, prof, cls):
+    """Boton «Copiar correo»: mucha gente no tiene cliente de correo configurado, asi que el mailto no basta."""
+    s = STR[lang]
+    return (f'<button type="button" class="{cls}" data-copy="{esc(prof["links"]["email"])}" data-ok="{esc(s["copied"])}" '
+            f'data-fail="{esc(s["copy_fail"])}">{esc(s["copy_mail"])}</button>')
+
+
+def onebox(lang, rel, prof):
+    """Ficha destacada (como los cuadros destacados del buscador clasico): quien es, rol, CV y contacto."""
+    s, L = STR[lang], prof["links"]
+    kw = dict(first=prof["first_name"])
+    return (f'<section class="ob" id="ob" aria-label="{esc(prof["name"])}">'
+            f'<h2><a href="{href(lang, rel, lang, "about")}">{esc(prof["name"])}</a> <span>- {esc(prof["role_short"][lang])}</span></h2>'
+            f'<p>{esc(prof["intro"][lang])}</p>'
+            f'<p class="obb"><a class="obtn" href="{asset(lang, rel, cvf(L, lang))}">{esc(s["ob_cv"])}</a>'
+            f'<a class="obtn" href="mailto:{esc(L["email"])}">{esc(fill(s["ob_mail"], **kw))}</a>'
+            f'{copybtn(lang, prof, "obtn")}'
+            f'<a href="{href(lang, rel, lang, "about")}">{esc(fill(s["ob_more"], **kw))}</a></p><p class="cpst" role="status" aria-live="polite"></p></section>')
+
+
+def cvf(L, lang):
+    """Ruta del PDF del CV segun el idioma (cv_en si existe)."""
+    return L.get("cv_en") if lang == "en" and L.get("cv_en") else L["cv"]
+
+
+def priv(lang):
+    """Aviso de privacidad de la analitica (solo si esta activa)."""
+    return f'<p class="fn">{esc(STR[lang]["privacy"])}</p>' if ANALYTICS and not SUFFIX else ""
+
+
 def classic_footer(lang, rel, prof, alt_href):
     s, L = STR[lang], prof["links"]
     nav = " - ".join([
@@ -399,10 +473,10 @@ def classic_footer(lang, rel, prof, alt_href):
         f'<a href="{alt_href}" hreflang="{"en" if lang == "es" else "es"}">{esc(s["other_name"])}</a>',
         f'<a href="{esc(L["linkedin"])}" rel="noopener">{s["link_linkedin"]}</a>',
         f'<a href="mailto:{esc(L["email"])}">{s["link_email"]}</a>',
-        f'<a href="{asset(lang, rel, L["cv"])}">{s["link_cv"]}</a>',
+        f'<a href="{asset(lang, rel, cvf(L, lang))}">{s["link_cv"]}</a>',
         f'<a href="{esc(L["github"])}" rel="noopener">GitHub</a>'])
     return f"""<footer class="ft"><p class="fnav">{nav}</p>
-<p class="cp">© 2026 {esc(prof['name'])}</p><p class="fn">{esc(s['footer_note'])}</p></footer>"""
+<p class="cp">© 2026 {esc(prof['name'])}</p><p class="fn">{esc(s['footer_note'])}</p>{priv(lang)}</footer>"""
 
 
 def home(lang, prof, projects, sizes):
@@ -444,11 +518,12 @@ def home(lang, prof, projects, sizes):
 <div class="cols">
 <main data-tab="todo">
 <h1 class="vh">{esc(fill(s['home_h1'], name=prof['name']))}</h1>
+{onebox(lang, rel, prof)}
 <p class="dyp"><span>{esc(s['didyou'])}</span> <a href="mailto:{esc(L['email'])}"><b><i>{esc(s['didyou_link'])}</i></b></a></p>
 <div id="none" class="none" hidden><p id="nonetxt"></p><p>{esc(s['none_sug'])}</p><ul>{tips}</ul></div>
-<section id="p-todo" aria-label="{esc(s['tab_all'])}">{results}</section>
-<section id="p-imagenes" class="igrid" aria-label="{esc(s['tab_img'])}">{figs}</section>
-<section id="p-codigo" aria-label="{esc(s['code_hint'])}">{codes}</section>
+<section id="p-todo" role="tabpanel" aria-labelledby="tab-todo">{results}</section>
+<section id="p-imagenes" class="igrid" role="tabpanel" aria-labelledby="tab-imagenes">{figs}</section>
+<section id="p-codigo" role="tabpanel" aria-labelledby="tab-codigo">{codes}</section>
 <section class="rel" id="rel"><h2>{esc(s['related'])}</h2><ul>{related}</ul></section>
 {pager}
 </main>
@@ -458,6 +533,7 @@ def home(lang, prof, projects, sizes):
 </div>
 <script type="application/json" id="cfg">{json.dumps(cfg, ensure_ascii=False).replace("</", "<\\/")}</script>
 <script src="{asset(lang, rel, 'assets/buscador.js')}" defer></script>
+<script src="{asset(lang, rel, 'assets/copiar.js')}" defer></script>
 </body></html>"""
     desc = fill(s["meta_home"], name=prof["name"])
     title = f"{qdef} - Cambeiro"
@@ -498,10 +574,10 @@ def about_page(lang, prof, projects):
     css = [asset(lang, rel, "assets/buscador.css"), asset(lang, rel, "assets/perfil.css")]
     other = "en" if lang == "es" else "es"
     L = prof["links"]
-    cv_url = asset(lang, rel, L["cv"])
-    size = file_kb(L["cv"])
+    cv_url = asset(lang, rel, cvf(L, lang))
+    size = file_kb(cvf(L, lang))
     home_h = href(lang, rel, lang, "")
-    cv = load("cv.json")
+    cv = load("cv.json" if lang == "es" else "cv.en.json")
 
     path = ""
     for it in prof["path"][lang]:
@@ -522,7 +598,7 @@ def about_page(lang, prof, projects):
         tools += (f'<li><a class="rq" href="{home_h}?q={quote(q)}"><svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true">'
                   f'<circle cx="10" cy="10" r="6.5" fill="none" stroke="currentColor" stroke-width="2.4"/><path d="M15 15l6 6" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/></svg>'
                   f'<span>{esc(t.lower())} · {esc(c)}</span></a></li>')
-    banner = fill(s["cache_banner"], url=cv_url, file=esc(os.path.basename(L["cv"])), date=esc(fmt_date(lang, prof["cv_date"])))
+    banner = fill(s["cache_banner"], url=cv_url, file=esc(os.path.basename(cvf(L, lang))), date=esc(fmt_date(lang, prof["cv_date"])))
     data = (f'data-terms="python,sql" data-label="{esc(s["terms_label"])}" data-ph="{esc(s["term_ph"])}" '
             f'data-rm="{esc(s["term_rm"])}" data-add="{esc(s["term_add"])}"')
     body = f"""<body class="ab">
@@ -539,18 +615,20 @@ def about_page(lang, prof, projects):
 <section class="blk" data-s="tecnicas"><h2>{esc(s['ab_tools'])}</h2><p class="sn mut">{esc(s['ab_tools_p'])}</p><ul class="rels">{tools}</ul></section>
 <section class="blk tr" data-s="idiomas"><h2>{esc(s['ab_lang'])}</h2><p class="sn">{esc(prof['languages'][lang])}</p></section>
 <section class="dym"><p class="fr">{esc(s['didyou'])} <a href="mailto:{esc(L['email'])}">{esc(s['didyou_link'])}</a></p><p class="sn">{esc(s['ab_hire_p'])}</p>
-<p class="bs"><a class="pbtn p" href="mailto:{esc(L['email'])}">{esc(s['ab_mail'])}</a><a class="pbtn" href="{esc(L['linkedin'])}" rel="noopener">{esc(s['ab_li'])}</a></p></section>
+<p class="sn eml"><a href="mailto:{esc(L['email'])}">{esc(L['email'])}</a></p>
+<p class="bs"><a class="pbtn p" href="mailto:{esc(L['email'])}">{esc(s['ab_mail'])}</a>{copybtn(lang, prof, "pbtn")}<a class="pbtn" href="{esc(L['linkedin'])}" rel="noopener">{esc(s['ab_li'])}</a></p><p class="sn cpst" role="status" aria-live="polite"></p></section>
 </main>
 </div>
 <aside class="stage" aria-label="{esc(s['folio_label'])}"><div class="sin">
 <p class="banner">{banner}</p>
 <div class="terms" {data} hidden></div>
 <p class="bs"><a class="sbtn p" href="{cv_url}">{esc(s['open_pdf'])}</a><a class="sbtn" href="{cv_url}" download>{esc(fill(s['dl_pdf'], size=size))}</a></p>
-<div class="paper"><article class="sheet" lang="es" aria-label="{esc(s['folio_label'])}"><div class="cv">{render_cv(cv)}</div></article></div>
+<div class="paper"><article class="sheet" lang="{lang}" aria-label="{esc(s['folio_label'])}"><div class="cv">{render_cv(cv)}</div></article></div>
 <p class="seecv"><a class="sbtn p" href="{cv_url}">{esc(s['see_cv'])}</a></p>
 </div></aside>
 </div>
 <script src="{asset(lang, rel, 'assets/perfil.js')}" defer></script>
+<script src="{asset(lang, rel, 'assets/copiar.js')}" defer></script>
 </body></html>"""
     title = f"{prof['name']} - {s['about_kind']} - Cambeiro"
     return head(lang, rel, title, prof["bio"][lang], alts, css, font_preload(lang, rel)) + body
@@ -565,10 +643,21 @@ def project_extra(lang, prof, p, skin):
              feats=p["features"][lang], facts=p["facts"][lang], stack=p["stack"], note=p["note"][lang],
              repo=p["links"]["repo"], home=href(lang, rel, lang, ""), other=other,
              other_h=href(lang, rel, other, rel), name=prof["name"], author=prof["first_name"], initials=prof["initials"],
-             asset_js=asset(lang, rel, "assets/reloc.js"), shot=(dict(src=asset(lang, rel, p["shot"]["full"]), w=p["shot"]["w"], h=p["shot"]["h"], alt=p["shot"]["alt"][lang], cap=p["shot"]["cap"][lang]) if p.get("shot") else None), asset_data=asset(lang, rel, "assets/reloc-data.js"))
+             asset_js=asset(lang, rel, "assets/reloc.js"), shot=(dict(src=asset(lang, rel, p["shot"]["full"]), w=p["shot"]["w"], h=p["shot"]["h"], alt=p["shot"]["alt"][lang], cap=p["shot"]["cap"][lang]) if p.get("shot") else None), asset_data=asset(lang, rel, "assets/reloc-data.js"), asset_tracker=asset(lang, rel, "assets/tracker.js"))
     alts = {l: absurl(l, rel) for l in LANGS}
     css = [asset(lang, rel, f"skins/{skin}.css")]
     return head(lang, rel, f"{p['title']} - {prof['name']} - Cambeiro", p["summary"][lang], alts, css) + EXTRA[skin](c)
+
+
+def legalize(html, *langs):
+    """Aviso de parodia en el pie de las paginas que no son la portada (la portada ya lo lleva)."""
+    notes = "<br>".join(f'<span lang="{l}">{esc(STR[l]["footer_note"])}</span>' for l in langs)
+    if ANALYTICS and not SUFFIX:
+        notes += "<br>" + "<br>".join(f'<span lang="{l}">{esc(STR[l]["privacy"])}</span>' for l in langs)
+    label = "Aviso legal" if langs == ("es",) else "Legal notice" if langs == ("en",) else "Aviso legal / Legal notice"
+    bar = (f'<section class="legal" aria-label="{label}" style="margin:12px 0 0;padding:10px 12px;background:#fff;color:#595959;'
+           f'font:12px/1.45 Arial,Helvetica,sans-serif;text-align:center;flex:1 0 100%">{notes}</section>')
+    return html.replace("</body>", bar + "</body>", 1)
 
 
 def project_page(lang, prof, p):
@@ -606,18 +695,28 @@ def project_page(lang, prof, p):
 
 
 def not_found(prof):
-    # 404 sirve desde cualquier ruta: usa base_path absoluto
+    """404 como pagina de resultados vacia del buscador (sirve desde cualquier ruta: rutas absolutas con base_path)."""
     bp = prof.get("base_path", "").rstrip("/")
+    blocks = ""
+    for l in LANGS:
+        s = STR[l]
+        tips = "".join(f"<li>{esc(fill(t, name=prof['first_name']))}</li>" for t in s["none_tips"])
+        blocks += (f'<section class="none" lang="{l}"><h1>{esc(s["nf_title"])}</h1>'
+                   f'<p>{esc(fill(s["none_q"], q="404"))}</p><p>{esc(s["nf_text"])}</p><p>{esc(s["none_sug"])}</p>'
+                   f'<ul>{tips}</ul>'
+                   f'<p class="dyp"><span>{esc(s["didyou"])}</span> <a href="{bp}{"/" if l == "es" else "/en/"}"><b><i>'
+                   f'{esc(fill(s["default_q"], name=prof["first_name"]))}</i></b></a></p></section>')
     s = STR["es"]
-    e = STR["en"]
     return f"""<!doctype html><html lang="es"><head><meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1"><title>404 - Cambeiro</title>
-<link rel="icon" href="{FAVICON}"><link rel="stylesheet" href="{bp}/assets/buscador.css"><link rel="stylesheet" href="{bp}/skins/base.css"></head>
-<body class="skin-base"><main class="proj"><p class="logo big">{logo()}</p>
-<h1>{esc(s['nf_title'])}</h1><p class="lead">{esc(s['nf_text'])}</p>
-<p><a class="btn" href="{bp}/">{esc(s['nf_back'])}</a></p>
-<h1 lang="en">{esc(e['nf_title'])}</h1><p class="lead" lang="en">{esc(e['nf_text'])}</p>
-<p><a class="btn alt" href="{bp}/en/" lang="en">{esc(e['nf_back'])}</a></p></main></body></html>"""
+<meta name="viewport" content="width=device-width,initial-scale=1"><meta name="referrer" content="strict-origin-when-cross-origin"><meta name="robots" content="noindex"><title>404 - Cambeiro</title>
+<link rel="icon" href="{FAVICON}"><link rel="stylesheet" href="{bp}/assets/buscador.css"></head>
+<body><div class="sr">
+<nav class="gt" aria-label="{esc(s['nav_top'])}"><span></span><span class="gr"><a href="{bp}/" hreflang="es" lang="es">Español</a><a href="{bp}/en/" hreflang="en" lang="en">English</a></span></nav>
+<header class="top"><a class="logo" href="{bp}/" aria-label="Cambeiro">{logo()}</a>
+<form class="box" role="search" action="{bp}/" method="get"><input name="q" type="search" value="{esc(fill(s['default_q'], name=prof['first_name']))}" aria-label="{esc(s['search_label'])}" spellcheck="false" size="38"><button type="submit" class="sb">{esc(s['search_btn'])}</button></form></header>
+<section class="bar" aria-label="{esc(s['pager_note'])}"><b>Web</b></section>
+<main>{blocks}</main>
+</div></body></html>"""
 
 
 def preview(out):
@@ -652,8 +751,12 @@ def sitemap(projects):
 
 
 def build():
-    global SITE
+    global SITE, ANALYTICS
     prof = load("profile.json")
+    code = (prof.get("analytics") or {}).get("goatcounter", "").strip().lower()
+    if code and not re.fullmatch(r"[a-z0-9][a-z0-9-]{1,30}", code):
+        sys.exit(f"analytics.goatcounter no valido: {code!r}")
+    ANALYTICS = code
     projects = load("projects.json")
     SITE = f"https://{prof['site_host']}{prof.get('base_path', '').rstrip('/')}"
     for p in projects:
@@ -662,13 +765,13 @@ def build():
     sizes = {}
     for lang in LANGS:
         for p in projects:
-            html = project_page(lang, prof, p)
+            html = legalize(project_page(lang, prof, p), lang)
             sizes[(lang, p["slug"])] = kbytes(len(html.encode("utf-8")))
             write(posixpath.join(page_dir(lang, f"p/{p['slug']}"), "index.html"), html)
     for lang in LANGS:
-        write(posixpath.join(page_dir(lang, "about"), "index.html"), about_page(lang, prof, projects))
+        write(posixpath.join(page_dir(lang, "about"), "index.html"), legalize(about_page(lang, prof, projects), lang))
         write(posixpath.join(page_dir(lang, ""), "index.html"), home(lang, prof, projects, sizes))
-    write("404.html", not_found(prof))
+    write("404.html", legalize(not_found(prof), "es", "en"))
     write(".nojekyll", "")
     write("robots.txt", f"User-agent: *\nAllow: /\n\nSitemap: {SITE}/sitemap.xml\n")
     write("sitemap.xml", sitemap(projects))

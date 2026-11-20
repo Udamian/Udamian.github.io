@@ -58,6 +58,7 @@
     });
     bolds.forEach(function (el) { bold(el, t); });
     bar(n, qs);
+    var ob = d.getElementById('ob'); if (ob) ob.hidden = qs !== cfg.def;
     none.hidden = n > 0;
     if (n === 0) {
       var parts = cfg.none.split('{q}');
@@ -73,10 +74,21 @@
     d.querySelectorAll('[role=tab]').forEach(function (a) {
       var on = a.getAttribute('data-tab') === name;
       a.setAttribute('aria-selected', on ? 'true' : 'false');
+      a.tabIndex = on ? 0 : -1; // patron de pestanas: solo la activa entra por tabulador
       if (on && tabname) tabname.textContent = a.textContent;
     });
   }
 
+  var tabs = Array.prototype.slice.call(d.querySelectorAll('[role=tab]'));
+  tabs.forEach(function (a, n) {
+    a.addEventListener('keydown', function (e) {
+      var to = e.key === 'ArrowRight' ? n + 1 : e.key === 'ArrowLeft' ? n - 1 : e.key === 'Home' ? 0 : e.key === 'End' ? tabs.length - 1 : -1;
+      if (to < 0) return;
+      e.preventDefault();
+      var t = tabs[(to + tabs.length) % tabs.length];
+      t.focus(); t.click();
+    });
+  });
   d.querySelectorAll('[role=tab]').forEach(function (a) {
     a.addEventListener('click', function (e) {
       e.preventDefault();

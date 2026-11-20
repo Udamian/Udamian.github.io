@@ -38,11 +38,28 @@ for p in sorted(pages):
         if not os.path.exists(dest):
             check(False, f"{rel}: enlace roto -> {u}")
 check(os.path.exists(ROOT + "/assets/og.png"), "assets/og.png existe")
+# privacidad: ningun telefono ni ruta local en lo que se publica (HTML, JSON, JS, CSS) ni en el texto del CV
+PHONE = re.compile(r"(?<![\d.])(?:\+34[ .-]?)?[6-9]\d{2}[ .-]?\d{3}[ .-]?\d{3}(?![\d.])")
+for ext in ("html", "json", "js", "css", "md", "txt", "xml"):
+    for f in glob.glob(ROOT + f"/**/*.{ext}", recursive=True):
+        if "/tests/" in f or "/node_modules/" in f or f.endswith(("relocation.json", "reloc-data.js", "land.txt")):
+            continue
+        t = open(f, encoding="utf-8", errors="ignore").read()
+        check(not PHONE.search(t), f"sin telefono en {os.path.relpath(f, ROOT)}")
+        check("/home/claude" not in t and "/tmp/claude" not in t, f"sin rutas locales en {os.path.relpath(f, ROOT)}")
+import subprocess, shutil
+if shutil.which("pdftotext"):
+    for f, kw in (("Damian_Cambeiro_CV.pdf", "Job Tracker"), ("Damian_Cambeiro_CV_EN.pdf", "Job Tracker")):
+        cvt = subprocess.run(["pdftotext", ROOT + "/assets/cv/" + f, "-"], capture_output=True, text=True).stdout
+        check(len(cvt) > 500 and not PHONE.search(cvt) and kw in cvt and "MySQL" in cvt, f"{f}: texto, sin telefono, con Job Tracker y MySQL")
+    pages = subprocess.run(["pdfinfo", ROOT + "/assets/cv/Damian_Cambeiro_CV_EN.pdf"], capture_output=True, text=True).stdout
+    check("Pages:           1" in pages, "CV en inglés: una pagina")
+    check("Damian_Cambeiro_CV_EN.pdf" in open(ROOT + "/en/index.html", encoding="utf-8").read() and "Damian_Cambeiro_CV_EN.pdf" not in open(ROOT + "/index.html", encoding="utf-8").read(), "cada idioma enlaza su CV")
 for rel in ("index.html", "en/index.html"):
     h = open(os.path.join(ROOT, rel), encoding="utf-8").read()
     check("linkedin.com/in/" in h and "mailto:" in h and ".pdf" in h, f"{rel}: LinkedIn, correo y CV visibles")
 cv = glob.glob(ROOT + "/assets/cv/*.pdf")
-check(len(cv) == 1 and open(cv[0], "rb").read(5) == b"%PDF-", "CV en PDF presente y valido")
+check(len(cv) == 2 and all(open(c, "rb").read(5) == b"%PDF-" for c in cv), "CV en PDF (es y en) presentes y validos")
 robots = open(ROOT + "/robots.txt").read()
 check("Sitemap: https://" in robots, "robots.txt apunta al sitemap")
 sm = open(ROOT + "/sitemap.xml", encoding="utf-8").read()

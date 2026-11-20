@@ -10,6 +10,7 @@
     "stack": [
       "Python",
       "pandas",
+      "NumPy",
       "scikit-learn",
       "Streamlit",
       "Plotly",
@@ -44,12 +45,14 @@
       "es": [
         "Costes de vida de 578 ciudades (Kaggle, Cost of Living Index 2022).",
         "Salarios de 18.112 desarrolladores de 149 países (Stack Overflow Developer Survey 2023).",
-        "Modelo de regresión del salario anual bruto: MAE de 29.022 € y R² de 0,53."
+        "Modelo de regresión del salario anual bruto: MAE de 29.022 € y R² de 0,53.",
+        "Fuentes del proyecto: Stack Overflow Developer Survey 2023 (datos bajo licencia ODbL 1.0), Kaggle Cost of Living Index 2022, OECD Tax Database (tipos marginales) y Kaggle World Cities Database (coordenadas). El mapa de esta página usa Natural Earth (dominio público)."
       ],
       "en": [
         "Cost of living for 578 cities (Kaggle, Cost of Living Index 2022).",
         "Salaries of 18,112 developers in 149 countries (Stack Overflow Developer Survey 2023).",
-        "Gross annual salary regression model: MAE of €29,022 and R² of 0.53."
+        "Gross annual salary regression model: MAE of €29,022 and R² of 0.53.",
+        "Project sources: Stack Overflow Developer Survey 2023 (data under the ODbL 1.0 licence), Kaggle Cost of Living Index 2022, OECD Tax Database (marginal rates) and Kaggle World Cities Database (coordinates). The map on this page uses Natural Earth (public domain)."
       ]
     },
     "note": {
@@ -176,7 +179,7 @@
       "es": "Todavía no tiene autenticación y la comprobación de «Sin respuesta» se hace al consultar, no en segundo plano. Siguiente paso previsto: separar empresas, entrevistas, pruebas técnicas y versiones de CV.",
       "en": "It has no authentication yet, and the “No response” check runs at query time, not in the background. Planned next step: split companies, interviews, technical tests and CV versions."
     },
-    "skin": "base"
+    "skin": "tracker"
   },
   {
     "slug": "ytm-sync",

@@ -12,6 +12,12 @@ threading.Thread(target=srv.serve_forever, daemon=True).start()
 B = f"http://127.0.0.1:{srv.server_address[1]}"
 D = json.load(open(os.path.join(ROOT, "data", "relocation.json"), encoding="utf-8"))
 fails = []
+GOAT = r'**/gc.zgo.at/**'
+GOAT2 = r'**/*.goatcounter.com/**'
+def stub_goat(c):
+    for pat in (GOAT, GOAT2):
+        c.route(pat, lambda r: r.fulfill(status=200, content_type='application/javascript', body=''))  # GOATSTUB: sin red, GoatCounter no se carga en las pruebas
+
 def check(c, msg):
     print(("ok   " if c else "FAIL ") + msg)
     if not c: fails.append(msg)
@@ -22,6 +28,7 @@ with sync_playwright() as p:
         for lang, base in (("es", "/p/relocationdevs/"), ("en", "/en/p/relocationdevs/")):
             tag = f"{name}-{lang}"
             ctx = br.new_context(viewport=vp)
+            stub_goat(ctx)
             ctx.add_init_script("history.replaceState=function(){throw new Error('blocked')}")
             pg = ctx.new_page(); errs = []
             pg.on("pageerror", lambda e: errs.append(str(e)))
@@ -91,6 +98,15 @@ with sync_playwright() as p:
             pg.screenshot(path=f"{OUT}/reloc_{tag}_about.png", full_page=True)
             check(errs == [], f"{tag} sin errores de consola {errs}")
             ctx.close()
+    # regresion de seguridad: el hash no puede inyectar atributos ni ejecutar JS
+    pg = br.new_page(viewport={"width": 1280, "height": 720}); stub_goat(pg); pg.goto(B + "/p/relocationdevs/")
+    pg.evaluate("window.__x = 0")
+    pg.goto(B + '/p/relocationdevs/#/b?q=a&w=%22%20onmouseover%3D%22window.__x%3D1&o=%22%20onfocus%3D%22window.__x%3D1&p=2')
+    pg.wait_for_selector("#rc"); pg.wait_for_timeout(300)
+    for a in pg.locator("#res a, .pg a, a.pn").all()[:40]:
+        a.hover()
+    check(pg.evaluate("window.__x") == 0 and pg.evaluate("document.querySelectorAll('[onmouseover],[onfocus]').length") == 0, "el hash no inyecta atributos de evento")
+    pg.close()
     br.close()
 print("\nFALLOS:", fails if fails else "ninguno")
 sys.exit(1 if fails else 0)

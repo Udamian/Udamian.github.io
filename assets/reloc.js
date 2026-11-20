@@ -1,5 +1,6 @@
 /* RelocationDevs como buscador de los 2000. Datos: window.RD (assets/reloc-data.js). Textos: window.RT / window.RM. */
 (function () {
+  document.documentElement.classList.add('js');
   'use strict';
   var RD = window.RD, T = window.RT, M = window.RM, LANG = M.lang;
   if (!RD || !T) return;
@@ -58,10 +59,17 @@
     var m = h.split('?');
     return { path: m[0] || '/', qs: new URLSearchParams(m[1] || '') };
   }
+  var lastView = null, booted = false;
   function show(name) {
     views.forEach(function (v) { var e = $('#v-' + v); if (e) e.hidden = v !== name; });
     $('#hd').hidden = name === 'home';
     window.scrollTo(0, 0);
+    // al cambiar de vista (no en la carga inicial ni al reordenar/filtrar), el foco pasa a la vista nueva
+    if (booted && lastView !== name) {
+      var el = $('#v-' + name), b = el && el.querySelector('.bar b');
+      if (el) { if (b) el.setAttribute('aria-label', b.textContent); el.setAttribute('tabindex', '-1'); el.focus({ preventScroll: true }); }
+    }
+    lastView = name;
   }
   function live(t) { $('#live').textContent = t; }
   function route(h) {
@@ -118,18 +126,21 @@
   }
   function pnum(v) { var n = parseFloat(v); return isFinite(n) && n > 0 ? n : 0; }
   function opts(qs) {
-    return { q: qs.get('q') || '', r: qs.get('r') === null ? -1 : +qs.get('r'), p: Math.max(1, +qs.get('p') || 1), o: qs.get('o') || 'score',
-      mn: pnum(qs.get('mn')), mr: pnum(qs.get('mr')), mt: pnum(qs.get('mt')), w: qs.get('w') || '' };
+    var o = qs.get('o'), w = qs.get('w'), r = qs.get('r') === null ? -1 : parseInt(qs.get('r'), 10);
+    // El hash lo controla quien envie el enlace: solo se aceptan valores conocidos (el resto se descarta).
+    return { q: qs.get('q') || '', r: isFinite(r) ? r : -1, p: Math.max(1, parseInt(qs.get('p'), 10) || 1),
+      o: ['score', 'net', 'pp', 'rent', 'sal'].indexOf(o) > -1 ? o : 'score',
+      mn: pnum(qs.get('mn')), mr: pnum(qs.get('mr')), mt: pnum(qs.get('mt')), w: /^[\d.,]{1,40}$/.test(w || '') ? w : '' };
   }
   function qstr(o, ch) {
     var p = [], x = Object.assign({}, o, ch || {});
     if (x.q) p.push('q=' + encodeURIComponent(x.q));
     if (x.r >= 0) p.push('r=' + x.r);
-    if (x.o && x.o !== 'score') p.push('o=' + x.o);
+    if (x.o && x.o !== 'score') p.push('o=' + encodeURIComponent(x.o));
     if (x.mn) p.push('mn=' + x.mn);
     if (x.mr) p.push('mr=' + x.mr);
     if (x.mt) p.push('mt=' + x.mt);
-    if (x.w && !isDefault(x.w)) p.push('w=' + x.w);
+    if (x.w && !isDefault(x.w)) p.push('w=' + encodeURIComponent(x.w));
     if (x.p > 1) p.push('p=' + x.p);
     return '#/b' + (p.length ? '?' + p.join('&') : '');
   }
@@ -306,8 +317,8 @@
   (function () {
     var hm = $('#hm'), box = $('#dots');
     if (!hm || !box) return;
-    var s = '';
-    GEO.forEach(function (c) { s += '<circle class="hd" data-i="' + c.i + '" cx="' + (c.lon + 180).toFixed(2) + '" cy="' + (90 - c.lat).toFixed(2) + '" r="1.5"/>'; });
+    var s = RD.land ? '<path class="ld" d="' + RD.land + '"/>' : '';
+    GEO.forEach(function (c) { s += '<circle class="hd" data-i="' + c.i + '" cx="' + (c.lon + 180).toFixed(2) + '" cy="' + (90 - c.lat).toFixed(2) + '" r="1.3"/>'; });
     var vigo = GEO.filter(function (c) { return c.name === 'Vigo'; })[0], mk = '';
     if (vigo) {
       var x = vigo.lon + 180, y = 90 - vigo.lat;
@@ -345,7 +356,7 @@
       sc.value = RD.salaries.Spain ? 'Spain' : sc.value;
     }
     var q = qs.get('c');
-    if (q && RD.salaries[q]) sc.value = q;
+    if (q && Object.prototype.hasOwnProperty.call(RD.salaries, q)) sc.value = q;
     drawS();
     function drawS() {
       var c = sc.value, role = +sr.value, e = RD.salaries[c], st = e.all, few = false;
@@ -401,4 +412,5 @@
   });
   document.documentElement.className += ' js';
   route();
+  booted = true;
 })();

@@ -11,6 +11,12 @@ srv = http.server.ThreadingHTTPServer(("127.0.0.1", 0), h)
 threading.Thread(target=srv.serve_forever, daemon=True).start()
 B = f"http://127.0.0.1:{srv.server_address[1]}"
 fails = []
+GOAT = r'**/gc.zgo.at/**'
+GOAT2 = r'**/*.goatcounter.com/**'
+def stub_goat(c):
+    for pat in (GOAT, GOAT2):
+        c.route(pat, lambda r: r.fulfill(status=200, content_type='application/javascript', body=''))  # GOATSTUB: sin red, GoatCounter no se carga en las pruebas
+
 def check(c, msg):
     print(("ok   " if c else "FAIL ") + msg)
     if not c: fails.append(msg)
@@ -19,6 +25,8 @@ with sync_playwright() as p:
     br = p.chromium.launch()
     for name, vp in (("d", {"width": 1280, "height": 720}), ("m", {"width": 390, "height": 844})):
         ctx = br.new_context(viewport=vp, device_scale_factor=1)
+        stub_goat(ctx)
+        ctx.grant_permissions(["clipboard-read", "clipboard-write"], origin=B)
         ctx.add_init_script("history.replaceState=function(){throw new Error('blocked')}")
         pg = ctx.new_page(); errs = []
         pg.on("pageerror", lambda e: errs.append(str(e)))
@@ -28,9 +36,18 @@ with sync_playwright() as p:
             tag = f"{name}-{lang}"
             check(pg.evaluate("document.documentElement.scrollWidth<=innerWidth"), f"{tag} sin overflow horizontal")
             check(pg.locator("article.res:visible").count() == 3, f"{tag} 3 resultados visibles")
+            check(pg.evaluate("[...document.querySelectorAll('.res .th img')].every(i=>i.getAttribute('src').includes('previews/') && i.complete && i.naturalWidth>0)"), f"{tag} miniaturas = capturas de las paginas interiores")
             check(pg.locator(".ads a[href^=mailto]:visible").count() == 1 and pg.locator(".ads a[href*=linkedin]:visible").count() == 1, f"{tag} anuncios de perfil con contacto visible")
             check(pg.locator("a[href*='streamlit.app'], a:text-is('Demo')").count() == 0, f"{tag} sin enlaces a demo")
+            check(pg.locator("#ob:visible").count() == 1 and pg.locator("#ob a[href$='.pdf']:visible").count() == 1, f"{tag} ficha destacada con CV y contacto")
             pg.screenshot(path=f"{OUT}/{tag}_home.png")
+            pg.locator("#ob [data-copy]").click()
+            em = pg.locator("#ob [data-copy]").get_attribute("data-copy")
+            pg.wait_for_function("document.querySelector('#ob .cpst').textContent.length>0")
+            check(em and "@" in em and em in pg.locator("#ob .cpst").inner_text(), f"{tag} boton copiar correo avisa de la direccion copiada")
+            check(pg.evaluate("navigator.clipboard.readText()") == em, f"{tag} el portapapeles contiene el correo")
+            pg.fill("#q", "docker"); pg.press("#q", "Enter")
+            check(pg.locator("#ob:visible").count() == 0, f"{tag} ficha oculta al buscar otra cosa")
             pg.fill("#q", "docker"); 
             check(pg.locator("article.res:visible").count() == 1, f"{tag} filtro docker -> 1")
             pg.fill("#q", "zzzz")
@@ -71,6 +88,8 @@ with sync_playwright() as p:
             pg.goto(B + path + "../" + "?q=proyectos%20con%20docker" if lang == "es" else B + "/en/?q=projects%20with%20docker"); pg.wait_for_load_state("networkidle")
             check(pg.locator("article.res:visible").count() == 1, f"{tag} ?q= filtra la portada")
         pg.goto(B + "/404.html"); pg.screenshot(path=f"{OUT}/{name}_404.png")
+        check(pg.locator("form[role=search] input[name=q]").count() == 1 and pg.locator(".none:visible").count() == 2, f"{name} 404 como pagina de resultados vacia (ES+EN)")
+        check(pg.evaluate("document.documentElement.scrollWidth<=innerWidth"), f"{name} 404 sin overflow")
         check(not errs, f"{name} sin errores de consola {errs}")
         ctx.close()
     br.close()

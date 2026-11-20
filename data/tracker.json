@@ -1,0 +1,175 @@
+{
+ "note": "Datos de ejemplo ficticios (empresas inventadas). No son candidaturas reales.",
+ "items": [
+  {
+   "id": 1,
+   "co": "Norte Datos",
+   "role": "Data Analyst Junior",
+   "type": "analyst",
+   "mode": "r",
+   "st": "enviada",
+   "ago": 40,
+   "news": 40
+  },
+  {
+   "id": 2,
+   "co": "Altamar Software",
+   "role": "Junior Python Developer",
+   "type": "backend",
+   "mode": "h",
+   "st": "enviada",
+   "ago": 38,
+   "news": 38
+  },
+  {
+   "id": 3,
+   "co": "Kiwi Analytics",
+   "role": "Analista de datos",
+   "type": "analyst",
+   "mode": "r",
+   "st": "enviada",
+   "ago": 30,
+   "news": 30
+  },
+  {
+   "id": 4,
+   "co": "Brumal Datos",
+   "role": "Data Engineer Junior (PySpark)",
+   "type": "engineer",
+   "mode": "r",
+   "st": "enviada",
+   "ago": 26,
+   "news": 26
+  },
+  {
+   "id": 5,
+   "co": "Alba Fintech Labs",
+   "role": "Backend Developer Junior",
+   "type": "backend",
+   "mode": "p",
+   "st": "enviada",
+   "ago": 3,
+   "news": 3
+  },
+  {
+   "id": 6,
+   "co": "Mareas Soft",
+   "role": "Python Developer",
+   "type": "backend",
+   "mode": "r",
+   "st": "enviada",
+   "ago": 1,
+   "news": 1
+  },
+  {
+   "id": 7,
+   "co": "Faro Consulting",
+   "role": "Consultor Junior de Datos",
+   "type": "analyst",
+   "mode": "h",
+   "st": "contactado",
+   "ago": 15,
+   "news": 9
+  },
+  {
+   "id": 8,
+   "co": "Sendero Data",
+   "role": "Ingeniero/a de Datos Python",
+   "type": "engineer",
+   "mode": "r",
+   "st": "contactado",
+   "ago": 11,
+   "news": 4
+  },
+  {
+   "id": 9,
+   "co": "Cumbre Labs",
+   "role": "Data Analyst",
+   "type": "analyst",
+   "mode": "r",
+   "st": "entrevista",
+   "ago": 17,
+   "news": 3
+  },
+  {
+   "id": 10,
+   "co": "Pixel Sur",
+   "role": "Desarrollador Backend FastAPI",
+   "type": "backend",
+   "mode": "h",
+   "st": "entrevista",
+   "ago": 20,
+   "news": 6
+  },
+  {
+   "id": 11,
+   "co": "Ágora Cloud",
+   "role": "Programador Junior",
+   "type": "other",
+   "mode": "r",
+   "st": "rechazada",
+   "ago": 45,
+   "news": 20
+  },
+  {
+   "id": 12,
+   "co": "Tramontana IT",
+   "role": "Desarrollador Java Junior",
+   "type": "other",
+   "mode": "p",
+   "st": "rechazada",
+   "ago": 41,
+   "news": 22
+  },
+  {
+   "id": 13,
+   "co": "Quasar Retail",
+   "role": "Analista Funcional",
+   "type": "other",
+   "mode": "h",
+   "st": "rechazada",
+   "ago": 36,
+   "news": 12
+  },
+  {
+   "id": 14,
+   "co": "Delta Logística",
+   "role": "BI Developer Junior",
+   "type": "analyst",
+   "mode": "r",
+   "st": "rechazada",
+   "ago": 33,
+   "news": 10
+  },
+  {
+   "id": 15,
+   "co": "Brújula Digital",
+   "role": "QA Automation Junior",
+   "type": "other",
+   "mode": "r",
+   "st": "rechazada",
+   "ago": 28,
+   "news": 8
+  },
+  {
+   "id": 16,
+   "co": "Nodo Seguros",
+   "role": "Data Analyst Python",
+   "type": "analyst",
+   "mode": "h",
+   "st": "rechazada",
+   "ago": 24,
+   "news": 6
+  },
+  {
+   "id": 17,
+   "co": "Olivar Tech",
+   "role": "Backend Developer",
+   "type": "backend",
+   "mode": "r",
+   "st": "rechazada",
+   "ago": 19,
+   "news": 4
+  }
+ ]
+}
